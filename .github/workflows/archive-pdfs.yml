@@ -1,0 +1,43 @@
+name: Archive open-access PDFs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'papers/**/metadata.json'
+      - 'scripts/fetch_pdfs.py'
+      - '.github/workflows/archive-pdfs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: archive-pdfs
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and validate licensed source PDFs
+        run: python3 scripts/fetch_pdfs.py
+      - name: Commit new source PDFs (if any)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- 'papers/**/*.pdf'
+          if git diff --cached --quiet; then
+            echo "No new PDFs to commit."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -m "docs(papers): archive original open-access PDF [skip ci]"
+          git push
+

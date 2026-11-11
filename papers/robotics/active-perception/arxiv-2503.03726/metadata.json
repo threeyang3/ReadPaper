@@ -1,0 +1,45 @@
+{
+  "id": "arxiv:2503.03726",
+  "title": "Active 6D Pose Estimation for Textureless Objects using Multi-View RGB Frames",
+  "title_zh": "基于多视角 RGB 图像的无纹理物体主动六自由度位姿估计",
+  "authors": [
+    "Jun Yang",
+    "Wenjie Xue",
+    "Sahar Ghavidel",
+    "Steven L. Waslander"
+  ],
+  "year": 2025,
+  "journal": "The International Journal of Robotics Research",
+  "journal_online_date": "2026-01-27",
+  "journal_doi": "10.1177/02783649251411922",
+  "arxiv": "2503.03726",
+  "arxiv_version": "v2",
+  "arxiv_updated": "2025-12-15",
+  "paper_file": "paper.pdf",
+  "source_pdf": "https://arxiv.org/pdf/2503.03726v2",
+  "alternate_pdf_urls": [
+    "https://arxiv.org/pdf/2503.03726",
+    "https://export.arxiv.org/pdf/2503.03726v2"
+  ],
+  "source_url": "https://arxiv.org/abs/2503.03726",
+  "project_url": "https://trailab.github.io/ActiveODPE/",
+  "license": "CC BY-NC-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "expected_pages": 24,
+  "primary_category": "robotics/active-perception",
+  "tags": [
+    "6D pose",
+    "multi-view geometry",
+    "active vision",
+    "next-best-view",
+    "uncertainty",
+    "GMM",
+    "robotics"
+  ],
+  "read_status": "first-read-completed",
+  "date_first_read": "2026-11-11",
+  "notes": [
+    "notes/explainer.zh-CN.md",
+    "notes/dialogue.md"
+  ]
+}
