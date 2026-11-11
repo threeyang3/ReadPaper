@@ -1,0 +1,39 @@
+{
+  "id": "doi:10.1109/TRO.2025.3562484",
+  "title": "Fast and Accurate 6-D Object Pose Refinement via Implicit Surface Optimization",
+  "title_zh": "基于隐式表面优化的快速准确六自由度物体位姿细化",
+  "authors": [
+    "Bo Pang",
+    "Deming Zhai",
+    "Jianan Zhen",
+    "Long Wang",
+    "Xianming Liu"
+  ],
+  "year": 2025,
+  "venue": "IEEE Transactions on Robotics",
+  "volume": "41",
+  "pages": "3129-3142",
+  "doi": "10.1109/TRO.2025.3562484",
+  "url": "https://ieeexplore.ieee.org/document/10970084",
+  "code_url": "https://github.com/pangbo1997/SDFR",
+  "pdf_source_url": null,
+  "paper_file": null,
+  "pdf_status": "not archived: public redistribution rights for final IEEE PDF not verified",
+  "license": "Not verified for public redistribution (IEEE published version)",
+  "primary_domain": "robotics",
+  "topic": "pose-estimation",
+  "tags": [
+    "6d-pose",
+    "pose-refinement",
+    "SDF",
+    "ICP",
+    "point-cloud",
+    "implicit neural representation"
+  ],
+  "first_read": "2026-11-11",
+  "analysis_evidence": [
+    "authors' public SDFR repository, sdfr.py, run_sdfr.py, OctreeSDF.py and related modules",
+    "paper abstract and institutional Harbin Institute of Technology publication"
+  ],
+  "analysis_scope": "First-pass technical analysis based on abstract, implementation and institutional reporting; full published PDF was not directly reviewed."
+}
