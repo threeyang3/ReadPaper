@@ -17,7 +17,8 @@
 ~~~text
 ReadPaper/
 ├── README.md                       # 主页与入口
-├── CATALOG.md                      # 可检索论文索引
+├── CATALOG.md                      # 人类可读的论文索引
+├── catalog.json                    # 机器可读目录（自动生成）
 ├── GUIDE.md                        # 分类、命名和增量维护规则
 ├── scripts/fetch_pdfs.py           # 从开放来源获取 PDF 并验证文件头
 ├── .github/workflows/archive-pdfs.yml
