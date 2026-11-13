@@ -25,6 +25,7 @@ tags: [robotics, grasping, 6d-grasp, rgbd, contact-projection, scene-completion,
 ## 资料
 
 - [精读笔记、图示、实验与批判性分析](notes/explainer.zh-CN.md)
+- [GFLA × Isaac Sim：Franka 仿真复现与遮挡评测方案](notes/simulation-isaacsim.md)
 - [对话、补充与勘误](notes/dialogue.md)
 - [接触族的降维解释](assets/contact-family.svg)
 - [微信原文](https://mp.weixin.qq.com/s/pKhe56xuswkVt9PI7_Nwcg) · [网页剪藏卡片](https://cubox.pro/web/card/7520763965190702501)
