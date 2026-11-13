@@ -182,3 +182,22 @@ SCN 通过局部体素对可见点云及图像特征编码，并由 3D U-Net 预
 - 进行专项对照实验：固定腕部相机无自遮挡 / 目标部分被夹爪遮挡 / 完全挡住接触区域，记录候选有效率、成功率、碰撞率与接触后滑移；不要把物体互挡结果误作夹爪自遮挡结果。
 
 **本次证据**：期刊摘要 https://ieeexplore.ieee.org/document/11622692；作者仓库 https://github.com/Nx1021/GFLA-release；用户提供的 CAAI 微信解读 https://mp.weixin.qq.com/s/pKhe56xuswkVt9PI7_Nwcg。完整正式 PDF 仍待逐页检查。
+
+## 14. 仿真实验与离线评测的区别（2026-11-13 补充）
+
+### 结论
+
+本论文提供 **GraspNet-1Billion 离线抓取质量评测**、HomebrewedDB / YCB 等跨数据集评测以及**真机抓取实验**；截至核查作者 README、`test.py`、`eval.py`、IEEE 摘要，**未发现独立的 MuJoCo / Isaac Sim / PyBullet 完整动力学仿真抓取实验**。这不是说从论文全文证明绝对没有，而是目前证据不足以确认有这样的实验。
+
+### 为什么 GraspNet 的 AP 不等于物理仿真抓取成功率？
+
+- 数据来源包含 RGB-D 场景、物体几何与标注抓取；预测网络输出 6D 抓取候选。
+- 评估代码 `eval.py` 引入 `graspnetAPI.GraspNetEval` 和 `graspnet_eval.eval_grasp`，使用几何、碰撞、摩擦等规则评价抓取，并计算 AP；不需要模拟机械臂电机、夹爪闭合、物体动力学及提起过程。
+- 真机成功率单独统计：单物体 95.42%（229/240）、杂乱 90.12%（146/162）、微小物体 84.80%（212/250）；不能与 AP 百分比混用。
+- 网络所用真实物体 CAD 对监督和离线标签的几何计算，也不等于“用模拟器执行完整任务”。
+
+### 可能的补充复现
+
+若要在 MuJoCo/Robosuite 中复现 GFLA 的执行过程，可沿用作者发布的权重，将仿真 RGB-D 输入模型，再进行抓取坐标转换与机械臂运动规划、夹爪闭合和提升，单独统计模拟执行成功率/滑移/碰撞。该步骤是**读者建议的新增实验**，不是作者已完成的仿真实验。
+
+**出处**：[IEEE 文章](https://ieeexplore.ieee.org/abstract/document/11622692)、[官方仓库](https://github.com/Nx1021/GFLA-release)、[评测代码](https://github.com/Nx1021/GFLA-release/blob/main/eval.py)。
