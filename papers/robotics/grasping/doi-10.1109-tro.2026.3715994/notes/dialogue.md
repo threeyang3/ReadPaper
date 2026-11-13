@@ -44,3 +44,13 @@
 **建议**：如果希望在 MuJoCo/Robosuite 中迁移，可用官方预训练权重对仿真 RGB-D 输出抓取候选，转换相机系→机器人系，规划接近、闭合、提升，按物理执行成功率及碰撞/滑移统计来补足现有离线 AP 与真机结果间的评估空缺。
 
 **依据**：[IEEE 摘要](https://ieeexplore.ieee.org/abstract/document/11622692)；[官方 README](https://github.com/Nx1021/GFLA-release/blob/main/README.md)；[eval.py](https://github.com/Nx1021/GFLA-release/blob/main/eval.py)；[test.py](https://github.com/Nx1021/GFLA-release/blob/main/test.py)。
+
+## 2026-11-13｜新增研究计划：使用 Isaac Sim 复现 GFLA
+
+**请求**：用户希望在真实动力学仿真环境下复现 GFLA，优先采用 Isaac Sim，并进一步细化仿真与实验方案。
+
+**工程判断**：采用已确认兼容的 Isaac Sim 6.2 + Isaac Lab 3.0、PhysX 与 RTX，Franka Panda + 双指夹爪 + 腕部 RGB-D；作者 GFLA 的 Python 3.11 / torch 2.3.1 环境与 Isaac Lab 3.0 Python 3.12 不兼容，故先选进程隔离 + 接口桥接。作者 `CFGNet.forward` 可接受非数据集的四输入格式，但是 `test.py` 偏向基准数据集；`Ts_Cn_in_T` 和 Z-up 桌面参考坐标尤为重要。
+
+**计划交付**：先检查发布权重及一帧 GraspNet 官方样本，再做 Isaac Sim Franka 物理与 RGB-D/K/T 单元测试，之后单帧 GFLA 结果、坐标/夹爪参数适配、IK/物理执行，最后开展固定 vs 腕部相机、物体自遮挡 vs 夹爪自遮挡、噪声/复杂物体的分组实验。
+
+**完整方案**：[GFLA × Isaac Sim 仿真与评测计划](simulation-isaacsim.md)。**当前状态**：规划已归档，尚未运行仿真或在用户本机验证。
