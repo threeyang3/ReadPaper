@@ -201,3 +201,9 @@ SCN 通过局部体素对可见点云及图像特征编码，并由 3D U-Net 预
 若要在 MuJoCo/Robosuite 中复现 GFLA 的执行过程，可沿用作者发布的权重，将仿真 RGB-D 输入模型，再进行抓取坐标转换与机械臂运动规划、夹爪闭合和提升，单独统计模拟执行成功率/滑移/碰撞。该步骤是**读者建议的新增实验**，不是作者已完成的仿真实验。
 
 **出处**：[IEEE 文章](https://ieeexplore.ieee.org/abstract/document/11622692)、[官方仓库](https://github.com/Nx1021/GFLA-release)、[评测代码](https://github.com/Nx1021/GFLA-release/blob/main/eval.py)。
+
+## 15. Isaac Sim 仿真复现规划（2026-11-13 补充）
+
+用户计划以 **Isaac Sim 6.2 + Isaac Lab 3.0 + Franka Panda + 腕部 RGB-D 相机**为基础，完整运行已发布的 GFLA 预训练模型，并补充原论文没有明确报告的真实动力学仿真抓取及腕部遮挡对照实验。具体的版本配对、双环境/双进程接口、坐标系统一、GraspNet Nx17 转 Franka TCP、物理夹爪参数、可重复场景、失败分类、分组设计、成功定义、复现 Gate 和代码目录见 [独立仿真方案](simulation-isaacsim.md)。
+
+**注意**：这是后续实验规划，当前尚未执行 Isaac Sim 或验证真机。不得将该计划中提出的基准结果、物理实验与闭环视角选择误称为 GFLA 论文已完成的工作。
