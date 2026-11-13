@@ -132,7 +132,7 @@ Isaac Sim / Isaac Lab (PhysX + RTX)
 
 ### P2：将 GFLA 接入静态 Isaac 相机
 
-- 单独实现 `g fla_service` 的无 GT 四输入模式，避免直接触发 GraspNet 数据集包装；
+- 单独实现 `gfla_service` 的无 GT 四输入模式，避免直接触发 GraspNet 数据集包装；
 - 允许先将一帧 Isaac RGB-D 写为本地 `.npz` 并离线推理：用于确诊协议与图像问题；再切换 IPC 请求模式；
 - 输出可视化叠加图：接触投影、grasp local frame、局部 SDF、原始点云与碰撞过滤候选；
 - 要先正确恢复相机系的 6D 抓取，**不执行机械臂动作**。
