@@ -6,42 +6,64 @@ on:
     paths:
       - 'papers/**/metadata.json'
       - 'scripts/fetch_pdfs.py'
+      - 'scripts/build_catalog.py'
+      - 'tests/test_archive.py'
+      - '.github/workflows/archive-pdfs.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'papers/**/metadata.json'
+      - 'scripts/fetch_pdfs.py'
+      - 'scripts/build_catalog.py'
+      - 'tests/test_archive.py'
       - '.github/workflows/archive-pdfs.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: archive-pdfs
+  group: archive-pdfs-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  archive:
+  regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 4
     steps:
-      - name: Checkout current repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - name: Offline downloader and catalog regressions
         run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Verify catalog can be generated deterministically
+        run: |
+          python3 scripts/build_catalog.py --write
+          python3 scripts/build_catalog.py --check
+
+  archive:
+    needs: regression
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Download and validate licensed source PDFs
         run: python3 scripts/fetch_pdfs.py
       - name: Refresh machine-readable catalog
         run: python3 scripts/build_catalog.py --write
-      - name: Commit new source PDFs (if any)
+      - name: Commit new source PDFs and catalog if changed
         shell: bash
         run: |
           set -euo pipefail
           git add -- 'papers/**/*.pdf' 'papers/**/*.pdf.provenance.json' catalog.json
           if git diff --cached --quiet; then
-            echo "No new PDFs to commit."
+            echo "No new archive data to commit."
             exit 0
           fi
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -m "docs(papers): archive original open-access PDF [skip ci]"
+              commit -m "docs(papers): archive original licensed PDFs and refresh catalog [skip ci]"
           git push
-
