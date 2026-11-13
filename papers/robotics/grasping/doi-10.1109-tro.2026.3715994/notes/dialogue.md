@@ -30,3 +30,17 @@
 - 可行的额外工程方案（非论文贡献）：抓取前在无自遮挡姿态采图；用机器人运动学和夹爪模型预测/遮罩自遮挡，必要时移动腕部进行二次观察；接近/接触时切换触觉及腕力反馈或视图融合。
 
 **关联**：[精读笔记新增“单视角、腕部相机与遮挡边界”](explainer.zh-CN.md#13-单视角腕部相机与遮挡边界)。
+
+## 2026-11-13｜追加问答：GFLA 有没有仿真实验？
+
+**问**：论文是否有仿真实验？
+
+**区分结论**：GFLA 已确认有 **GraspNet-1Billion 离线基准评测**、**HB/YCB 跨数据集离线评测**及**真实机器人抓取实验**。离线评测使用带真实 RGB-D 观测与几何抓取标注的数据，通过 GraspNetAPI 的 `GraspNetEval` / `eval_grasp` 根据解析的抓取规则计算 AP；这不是物理引擎驱动的机器人完整抓取执行。
+
+**当前证据界限**：核验 IEEE 官方摘要、作者 README 与 `test.py`、`eval.py` 和 `eval_analyze.py` 后，尚未发现作者报告在 MuJoCo、Isaac Sim、PyBullet 等环境内执行机械臂—夹爪—物体动力学闭环仿真、并统计仿真抓取成功率的独立实验。不能把“几何/摩擦评估”直接当作“仿真执行成功率”。缺少完整期刊 PDF，故采用“未发现”，而非绝对断言不存在。
+
+**真机对照**：作者 README 明示单物体 229/240（95.42%）、杂乱多物体 146/162（90.12%）、微小物体 212/250（84.80%）。
+
+**建议**：如果希望在 MuJoCo/Robosuite 中迁移，可用官方预训练权重对仿真 RGB-D 输出抓取候选，转换相机系→机器人系，规划接近、闭合、提升，按物理执行成功率及碰撞/滑移统计来补足现有离线 AP 与真机结果间的评估空缺。
+
+**依据**：[IEEE 摘要](https://ieeexplore.ieee.org/abstract/document/11622692)；[官方 README](https://github.com/Nx1021/GFLA-release/blob/main/README.md)；[eval.py](https://github.com/Nx1021/GFLA-release/blob/main/eval.py)；[test.py](https://github.com/Nx1021/GFLA-release/blob/main/test.py)。
