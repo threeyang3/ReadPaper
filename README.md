@@ -8,6 +8,7 @@
 | --- | --- | --- | --- | --- |
 | Robotics 机器人学 | Active Perception 主动感知 | [Active 6D Pose Estimation for Textureless Objects using Multi-View RGB Frames](papers/robotics/active-perception/arxiv-2503.03726/README.md) | 2026-11-11 | [精读笔记](papers/robotics/active-perception/arxiv-2503.03726/notes/explainer.zh-CN.md) · [交流记录](papers/robotics/active-perception/arxiv-2503.03726/notes/dialogue.md) |
 | Robotics 机器人学 | Pose Estimation / Refinement 位姿估计与细化 | [Fast and Accurate 6-D Object Pose Refinement via Implicit Surface Optimization](papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/README.md) | 2026-11-11 | [精读笔记](papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/notes/explainer.zh-CN.md) · [交流记录](papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/notes/dialogue.md) |
+| Robotics 机器人学 | Grasping / Grasp Planning 机器人抓取 | [GFLA: A Grasping Framework With Learning-Based Perception and Analytical Modeling for Single-View Scenes](papers/robotics/grasping/doi-10.1109-tro.2026.3715994/README.md) | 2026-11-13 | [精读笔记](papers/robotics/grasping/doi-10.1109-tro.2026.3715994/notes/explainer.zh-CN.md) · [交流记录](papers/robotics/grasping/doi-10.1109-tro.2026.3715994/notes/dialogue.md) |
 
 完整表格：[CATALOG.md](CATALOG.md)。分类与更新约定：[GUIDE.md](GUIDE.md)。
 
@@ -37,6 +38,12 @@ ReadPaper/
                 ├── metadata.json
                 ├── notes/         # 中文精读与讨论
                 └── assets/        # 自绘 SDF/ICP 图示
+        └── grasping/
+            └── doi-10.1109-tro.2026.3715994/
+                ├── README.md
+                ├── metadata.json
+                ├── notes/         # 中文精读与交流记录
+                └── assets/        # 自绘方法和接触族图示
 ~~~
 
 ## 设计原则
