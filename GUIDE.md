@@ -43,3 +43,11 @@
 | notes/dialogue.md | 继续提问时追加的问答摘要、勘误和研究决策 |
 | assets/*.svg | 独立的高清示意图 |
 
+
+## 6. 跨软件读取与自动更新
+
+- 根目录 `catalog.json` 是公开、只读、确定性生成的目录索引（`python scripts/build_catalog.py --write`）。使用 `paper_uid` 关联 Zotero、PaperFlow 与 Obsidian；客户端不得以文件夹路径作为主键。
+- `pdf_state=link-only` 表示版权或下载源未满足公开归档条件，不是流水线失败；`missing` 表示曾声明应归档 PDF 但文件还未取得。两者均不得被标为“全文已分析”。
+- 新下载的 PDF 生成 `paper.pdf.provenance.json`，记录来源、版本和哈希；已有无 sidecar 的 PDF 作为 legacy 标识，不会自动覆盖。版本变化需要显式保存新旧版本及重新分析，不能仅改元数据而悄悄沿用旧 PDF。
+- 分析范围 `analysis_scope` 与 PDF 可用性是两项独立证据；阅读客户端必须分别展示。修改人类笔记必须用增量编辑，导入程序应只写自己的派生文件。
+- `catalog.json` 适合云端服务与阅读器读取；它**不是** PaperFlow 的标准公共 Feed，不能把它直接传给 `paperflow source sync`。正式桥接前必须做身份映射和数据层级适配。
