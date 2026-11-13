@@ -1,0 +1,42 @@
+{
+  "id": "doi:10.1109/TRO.2026.3715994",
+  "title": "GFLA: A Grasping Framework With Learning-Based Perception and Analytical Modeling for Single-View Scenes",
+  "title_zh": "GFLA：面向单视角场景的学习感知与解析建模融合抓取框架",
+  "authors": [
+    "Xiao Ning",
+    "Jianzhong Yang",
+    "Si Huang",
+    "Chengzuo Guo",
+    "Enzhao Zhang"
+  ],
+  "year": 2026,
+  "publication_date": "2026-07-23",
+  "venue": "IEEE Transactions on Robotics",
+  "volume": "42",
+  "pages": "3141-3159",
+  "doi": "10.1109/TRO.2026.3715994",
+  "url": "https://ieeexplore.ieee.org/document/11622692",
+  "code_url": "https://github.com/Nx1021/GFLA-release",
+  "source_article_url": "https://mp.weixin.qq.com/s/pKhe56xuswkVt9PI7_Nwcg",
+  "source_clip_url": "https://cubox.pro/web/card/7520763965190702501",
+  "pdf_status": "Not archived; permission to redistribute an original IEEE or accepted manuscript PDF not verified.",
+  "paper_file": null,
+  "source_pdf": null,
+  "license": "PDF redistribution rights not established",
+  "primary_domain": "robotics",
+  "topic": "grasping",
+  "tags": [
+    "6d-grasp",
+    "RGB-D",
+    "GFLA",
+    "CPDN",
+    "SCN",
+    "SDF",
+    "force closure",
+    "scene completion",
+    "contact family",
+    "generalization"
+  ],
+  "first_read": "2026-11-13",
+  "notes_status": "First pass. Verified IEEE abstract and official repo; detailed article treated as secondary until paper text is available."
+}
