@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 490" width="1040" height="490" role="img" aria-label="Inverse projection contact family: known visible start point and ray of unknown endpoint depth">
+<rect width="1040" height="490" rx="16" fill="#f8fafc"/>
+<text x="27" y="39" font-family="Arial" font-weight="700" font-size="25" fill="#1e3249">Contact Family: one known 3D start, one unknown-depth ray</text>
+<rect x="29" y="66" width="980" height="373" rx="11" fill="#fff" stroke="#cbd7e5" stroke-width="1.5"/>
+<ellipse cx="652" cy="239" rx="173" ry="124" fill="#61b9a7" fill-opacity=".16" stroke="#18977f" stroke-width="3"/>
+<path d="M652 115a173 124 0 0 1 0 248" stroke="#15977f" stroke-width="2.3" stroke-dasharray="5 7" fill="none"/>
+<path d="M110 353 L950 112" stroke="#9c69bc" stroke-width="3" stroke-dasharray="7 7" opacity=".85"/>
+<path d="M110 353 L497 301" stroke="#e49a36" stroke-width="3" opacity=".85"/>
+<circle cx="110" cy="353" r="18" fill="#415b75"/><circle cx="110" cy="353" r="7" fill="#fff"/><text x="109" y="390" text-anchor="middle" font-family="Arial" font-size="16" fill="#334b63">camera</text>
+<circle cx="497" cy="301" r="8" fill="#e78e22" stroke="#fff" stroke-width="2"/>
+<text x="414" y="290" font-family="Arial" font-weight="700" fill="#b9781c" font-size="18">p_s (visible)</text>
+<circle cx="699" cy="184" r="9" fill="#a360bb" stroke="#fff" stroke-width="2"/>
+<circle cx="750" cy="169" r="8" fill="#a360bb" fill-opacity=".65"/>
+<circle cx="801" cy="155" r="7" fill="#a360bb" fill-opacity=".4"/>
+<path d="M497 301L699 184" stroke="#299a7c" stroke-width="4"/>
+<path d="M497 301L750 169" stroke="#299a7c" stroke-width="2" stroke-dasharray="6 6" opacity=".7"/>
+<path d="M497 301L801 155" stroke="#299a7c" stroke-width="2" stroke-dasharray="6 6" opacity=".4"/>
+<path d="M724 149 l15 -26" stroke="#a360bb" stroke-width="1.6"/><text x="730" y="118" font-family="Arial" font-weight="700" font-size="18" fill="#8c4ca9">p_e(lambda)</text>
+<path d="M799 155 l37 -24" stroke="#a360bb" stroke-width="1.6"/><text x="842" y="127" font-size="14" font-family="Arial" fill="#785393">unknown depth</text>
+<text x="626" y="391" font-size="16" fill="#218c79" font-family="Arial">predicted object surface: SDF = 0</text>
+<rect x="80" y="91" width="320" height="80" rx="8" fill="#fff8e8" stroke="#e6c68b"/>
+<text x="99" y="119" font-family="Arial" font-size="16" fill="#8c6019" font-weight="700">Projected start u_s</text>
+<text x="99" y="144" font-family="Arial" font-size="14" fill="#6e5a3c">RGB-D gives z_s, hence p_s is known</text>
+<rect x="83" y="202" width="322" height="80" rx="8" fill="#f5eafa" stroke="#d7a9e2"/>
+<text x="104" y="230" font-family="Arial" font-size="16" fill="#855099" font-weight="700">Projected end u_e</text>
+<text x="104" y="255" font-family="Arial" font-size="14" fill="#6e527c">Backside depth lambda remains unknown</text>
+<rect x="167" y="450" width="712" height="29" rx="7" fill="#eef7f4"/><text x="523" y="470" text-anchor="middle" font-size="15" font-family="Arial" fill="#1c8066">Sample lambda → intersect SDF surface → estimate contact normals → test force closure</text>
+</svg>
