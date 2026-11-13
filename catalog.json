@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "papers": [
+    {
+      "paper_uid": "arxiv:2503.03726",
+      "title": "Active 6D Pose Estimation for Textureless Objects using Multi-View RGB Frames",
+      "title_zh": "基于多视角 RGB 图像的无纹理物体主动六自由度位姿估计",
+      "authors": [
+        "Jun Yang",
+        "Wenjie Xue",
+        "Sahar Ghavidel",
+        "Steven L. Waslander"
+      ],
+      "year": 2025,
+      "category": "robotics/active-perception",
+      "tags": [
+        "6D pose",
+        "multi-view geometry",
+        "active vision",
+        "next-best-view",
+        "uncertainty",
+        "GMM",
+        "robotics"
+      ],
+      "first_read": "2026-11-11",
+      "metadata_path": "papers/robotics/active-perception/arxiv-2503.03726/metadata.json",
+      "pdf_path": "papers/robotics/active-perception/arxiv-2503.03726/paper.pdf",
+      "pdf_state": "archived",
+      "pdf_sha256": "bef03adb3292970aa7a0896199b8dca6f5772b5d9d690bd432ed619ef3d3d087",
+      "source_pdf": "https://arxiv.org/pdf/2503.03726v2",
+      "source_url": "https://arxiv.org/abs/2503.03726",
+      "arxiv_version": "v2",
+      "analysis_scope": null,
+      "notes": [
+        "papers/robotics/active-perception/arxiv-2503.03726/notes/explainer.zh-CN.md",
+        "papers/robotics/active-perception/arxiv-2503.03726/notes/dialogue.md"
+      ]
+    },
+    {
+      "paper_uid": "doi:10.1109/tro.2026.3715994",
+      "title": "GFLA: A Grasping Framework With Learning-Based Perception and Analytical Modeling for Single-View Scenes",
+      "title_zh": "GFLA：面向单视角场景的学习感知与解析建模融合抓取框架",
+      "authors": [
+        "Xiao Ning",
+        "Jianzhong Yang",
+        "Si Huang",
+        "Chengzuo Guo",
+        "Enzhao Zhang"
+      ],
+      "year": 2026,
+      "category": "robotics/grasping",
+      "tags": [
+        "6d-grasp",
+        "RGB-D",
+        "GFLA",
+        "CPDN",
+        "SCN",
+        "SDF",
+        "force closure",
+        "scene completion",
+        "contact family",
+        "generalization"
+      ],
+      "first_read": "2026-11-13",
+      "metadata_path": "papers/robotics/grasping/doi-10.1109-tro.2026.3715994/metadata.json",
+      "pdf_path": null,
+      "pdf_state": "link-only",
+      "pdf_sha256": null,
+      "source_pdf": null,
+      "source_url": "https://ieeexplore.ieee.org/document/11622692",
+      "arxiv_version": null,
+      "analysis_scope": "First pass. Verified IEEE abstract and official repo; detailed article treated as secondary until paper text is available.",
+      "notes": [
+        "papers/robotics/grasping/doi-10.1109-tro.2026.3715994/notes/explainer.zh-CN.md",
+        "papers/robotics/grasping/doi-10.1109-tro.2026.3715994/notes/dialogue.md"
+      ]
+    },
+    {
+      "paper_uid": "doi:10.1109/tro.2025.3562484",
+      "title": "Fast and Accurate 6-D Object Pose Refinement via Implicit Surface Optimization",
+      "title_zh": "基于隐式表面优化的快速准确六自由度物体位姿细化",
+      "authors": [
+        "Bo Pang",
+        "Deming Zhai",
+        "Jianan Zhen",
+        "Long Wang",
+        "Xianming Liu"
+      ],
+      "year": 2025,
+      "category": "robotics/pose-estimation",
+      "tags": [
+        "6d-pose",
+        "pose-refinement",
+        "SDF",
+        "ICP",
+        "point-cloud",
+        "implicit neural representation"
+      ],
+      "first_read": "2026-11-11",
+      "metadata_path": "papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/metadata.json",
+      "pdf_path": null,
+      "pdf_state": "link-only",
+      "pdf_sha256": null,
+      "source_pdf": null,
+      "source_url": "https://ieeexplore.ieee.org/document/10970084",
+      "arxiv_version": null,
+      "analysis_scope": "First-pass technical analysis based on abstract, implementation and institutional reporting; full published PDF was not directly reviewed.",
+      "notes": [
+        "papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/notes/explainer.zh-CN.md",
+        "papers/robotics/pose-estimation/doi-10.1109-tro.2025.3562484/notes/dialogue.md"
+      ]
+    }
+  ]
+}
