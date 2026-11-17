@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560">
+<style>
+text {font-family:"Noto Sans CJK SC","Microsoft YaHei",Arial,sans-serif;fill:#16304c}
+.title{font-size:28px;font-weight:700}
+.st{font-size:18px;font-weight:700}
+.small{font-size:15px;fill:#52697e}
+.box{fill:#f6f9fc;stroke:#d3e2f0;stroke-width:2}
+.blue{fill:#e7f2ff;stroke:#4f96e4}
+.green{fill:#e8f9f0;stroke:#29a178}
+.purple{fill:#f2edff;stroke:#9076df}
+.line{fill:none;stroke:#7791aa;stroke-width:3;marker-end:url(#a)}
+</style>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#7791aa"/></marker></defs>
+<rect width="1200" height="560" fill="white"/>
+<text x="45" y="52" class="title">FoundationPose：统一位姿估计 / 跟踪（阅读示意）</text>
+<rect x="40" y="100" rx="16" ry="16" width="220" height="85" class="box blue"/>
+<text x="150" y="134" class="st" text-anchor="middle">已知 CAD</text>
+<text x="150" y="160" class="small" text-anchor="middle">textured mesh</text>
+<rect x="40" y="214" rx="16" ry="16" width="220" height="105" class="box purple"/>
+<text x="150" y="251" class="st" text-anchor="middle">参考 RGB-D</text>
+<text x="150" y="278" class="small" text-anchor="middle">Mask / 参考相机位姿</text>
+<rect x="309" y="214" rx="16" ry="16" width="230" height="105" class="box purple"/>
+<text x="424" y="250" class="st" text-anchor="middle">SDF 物体建模</text>
+<text x="424" y="278" class="small" text-anchor="middle">提取带纹理网格</text>
+<path d="M260 266H309" class="line"/><path d="M260 141H620V239" class="line"/><path d="M539 266H620" class="line"/>
+<rect x="617" y="210" rx="16" ry="16" width="226" height="106" class="box blue"/>
+<text x="730" y="246" class="st" text-anchor="middle">统一可渲染物体</text>
+<text x="730" y="273" class="small" text-anchor="middle">网格 + RGB-D 渲染</text>
+<rect x="40" y="374" rx="16" ry="16" width="250" height="95" class="box green"/>
+<text x="165" y="405" class="st" text-anchor="middle">实时 RGB-D + K</text>
+<text x="165" y="431" class="small" text-anchor="middle">首帧 Mask / Depth</text>
+<rect x="340" y="374" rx="16" ry="16" width="235" height="95" class="box"/>
+<text x="457" y="405" class="st" text-anchor="middle">多姿态初始假设</text>
+<text x="457" y="431" class="small" text-anchor="middle">icosphere + 深度中心</text>
+<path d="M290 421H340" class="line"/>
+<rect x="640" y="374" rx="16" ry="16" width="238" height="95" class="box blue"/>
+<text x="759" y="404" class="st" text-anchor="middle">Refiner 网络</text>
+<text x="759" y="431" class="small" text-anchor="middle">渲染对比 → Δt, ΔR</text>
+<path d="M575 421H640" class="line"/><path d="M730 316V374" class="line"/>
+<rect x="925" y="374" rx="16" ry="16" width="230" height="95" class="box green"/>
+<text x="1040" y="406" class="st" text-anchor="middle">Scorer → 最佳 SE(3)</text>
+<text x="1040" y="432" class="small" text-anchor="middle">跨假设排序（初始）</text>
+<path d="M878 421H925" class="line"/>
+<path d="M1040 469V511H759V471" class="line"/>
+<text x="760" y="537" class="small" text-anchor="middle">后续视频帧：以上一位姿为初值，仅 Refiner 跟踪</text>
+<text x="40" y="347" class="small">两种对象表示，进入同一个渲染-比较框架</text>
+</svg>
