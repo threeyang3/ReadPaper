@@ -1,0 +1,43 @@
+{
+  "id": "arxiv:2312.08344",
+  "title": "FoundationPose: Unified 6D Pose Estimation and Tracking of Novel Objects",
+  "title_zh": "FoundationPose：面向新物体的统一六自由度位姿估计与跟踪",
+  "authors": [
+    "Bowen Wen",
+    "Wei Yang",
+    "Jan Kautz",
+    "Stan Birchfield"
+  ],
+  "year": 2024,
+  "conference": "CVPR 2024 (Highlight)",
+  "doi": "10.1109/CVPR52733.2024.01692",
+  "arxiv": "2312.08344",
+  "arxiv_version": "v2",
+  "paper_file": null,
+  "source_pdf": "https://arxiv.org/pdf/2312.08344v2",
+  "source_url": "https://arxiv.org/abs/2312.08344",
+  "project_url": "https://nvlabs.github.io/FoundationPose/",
+  "code_url": "https://github.com/NVlabs/FoundationPose",
+  "paper_license_check": "Open-access CVF/arXiv copies; PDF not locally archived. Do not infer code license applies to paper.",
+  "code_license": "NVIDIA Source Code License (research/evaluation only)",
+  "primary_category": "robotics/pose-estimation",
+  "tags": [
+    "6D pose",
+    "pose tracking",
+    "novel objects",
+    "RGB-D",
+    "render-and-compare",
+    "foundation model",
+    "neural SDF",
+    "Isaac Sim",
+    "model-free",
+    "model-based"
+  ],
+  "read_status": "first-read-completed",
+  "date_first_read": "2026-11-17",
+  "analysis_scope": "Paper CVPR2024 text and official GitHub main README / key inference and model-free code reviewed. No GPU execution, pretrained weights validation or live robot tests. PDF linked only.",
+  "notes": [
+    "notes/explainer.zh-CN.md",
+    "notes/dialogue.md"
+  ]
+}
