@@ -25,6 +25,8 @@ tags: [robotics, 6d-pose, pose-refinement, sdf, implicit-neural-representation, 
 
 - [中文精读、公式解释和代码审查](notes/explainer.zh-CN.md)
 - [对话记录与后续补充](notes/dialogue.md)
+- [仿真与 SimReal 实验设计（含源码参数核对）](notes/simulation.zh-CN.md)
+- [仿真实验流程图](assets/simulation-design.svg)
 - [ICP 与 SDF 思路对照图](assets/icp-vs-sdf.svg)
 - [哈工大研究报道](https://news.hit.edu.cn/2025/0516/c1510a237967/page.htm)
 
