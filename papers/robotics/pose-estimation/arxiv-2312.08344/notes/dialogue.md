@@ -32,3 +32,21 @@
 已在[中文精读第九节](explainer.zh-CN.md)补充精确场景参数、论文实验的证据边界与建议复现方案。
 
 **论文位置**：https://arxiv.org/html/2312.08344 (§3.1, §4, Appendix §5.2)
+
+## 2026-11-19 · RTX 5090 本地复现 Isaac Sim 仿真实验
+
+**用户需求**：在单台本地 RTX 5090 主机上复现 FoundationPose 的仿真实验，要求一份能直接交给 Codex 的完整可执行提示词。
+
+**已产出**：[RTX 5090 × Isaac Sim 完整复现任务书](reproduction-rtx5090-isaacsim.md)。
+
+**本次方案的主要决策**：
+- 默认优先 Ubuntu 24.04、Isaac Sim 6.2（2026-10 发布）；首先探测实际硬件和系统配置，RTX 5090 需要真实支持 sm_120 的 PyTorch/CUDA 12.8+ 环境及正确编译的扩展。
+- Isaac Sim 与 FoundationPose Python 环境分开，首轮采用磁盘数据交换、顺序执行，避免单卡 32 GB VRAM 同时占用。
+- 先官方预训练 model-based demo，再 Isaac Sim 单物体 GT Mask/RGB-D 基线，再多物体堆叠和光照/遮挡/深度扰动。Franka 腕相机运动补偿属于独立扩展。
+- 验收重点是相机坐标/深度定义、mesh 尺度、真实 CUDA 扩展验证、量化姿态误差、日志/种子/报告。明确区分“受论文启发的复现实验”和“官方百万规模训练的严格复现”。
+- 不自动重装驱动/系统，不使用 GitHub CI，不声称已经在用户 5090 主机执行实验。本次仅创建提示词及归档。
+
+**文档参考**：
+- https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/requirements.html
+- https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/install_python.html
+- https://github.com/NVlabs/FoundationPose/pull/369
