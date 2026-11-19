@@ -20,6 +20,10 @@ tags: [robotics, pose-estimation, pose-tracking, RGB-D, foundation-model, render
 
 ![自绘核心流程图](assets/pipeline.svg)
 
+## RTX 5090 × Isaac Sim 仿真实验复现任务书
+
+- [完整 Codex 执行提示词（2026-11-19）](notes/reproduction-rtx5090-isaacsim.md)：单机 5090，双环境隔离，Isaac Sim 6.2 合成 RGB-D、FoundationPose model-based register/track、多场景遮挡/噪声实验、定量报告，Franka 腕部相机作为可选扩展。此任务书是开发计划，不代表任何本地实验已运行。
+
 ## 阅读入口
 
 - [详细中文精读、源码核对与复现方案](notes/explainer.zh-CN.md)
