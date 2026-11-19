@@ -33,3 +33,13 @@
 - 新增了配套 SVG 示意，并并入 [精读第 12 节](explainer.zh-CN.md#12-2026-11-19-增量隐式表面与观测点的基础解释)。
 
 **源码**：[depth_to_pointcloud](https://github.com/pangbo1997/SDFR/blob/master/prepare_dataset.py)、[SDFR_adam](https://github.com/pangbo1997/SDFR/blob/master/sdfr.py)。
+
+## 2026-11-19｜继续讨论：搭建仿真环境并尝试改进 SDFR
+
+**问题**：什么角度适合作为研究切入，怎样有步骤建立仿真环境？
+
+**建议**：先用官方 PyTorch3D 重建原始方法及 ICP/FRICP 基线，再将数据生成环节扩展到 Isaac Sim 6.2（RGB/Depth/instance mask/GT pose），用独立 `.npz` 等数据协议连接不同 Python 环境。最推荐研究方向为观测置信度、可见性感知和鲁棒损失下的 SDF 位姿细化；还可以考虑多视角、RGB 轮廓、多假设初始化、早停/优化器和主动相机运动。
+
+**原始代码值得检验**：统一 `mean(abs(sdf))` 残差，`SDFR_adam` 平移初值为目标点均值、固定 100 步优化、FPS 可用 150 点。推荐系统对照 SDFR L1 / 变换鲁棒损失 / 置信加权 / 可见性感知，并在可控初始扰动、离群点、深度缺失等条件下报告成功率与长尾误差。
+
+**实现状态**：尚未开始安装、生成数据或运行实验；不推断提升幅度。详细研究方案见 [research-roadmap.zh-CN.md](research-roadmap.zh-CN.md)。
