@@ -22,3 +22,13 @@
 - https://openaccess.thecvf.com/content/CVPR2024/papers/Wen_FoundationPose_Unified_6D_Pose_Estimation_and_Tracking_of_Novel_Objects_CVPR_2024_paper.pdf
 - https://github.com/NVlabs/FoundationPose/blob/main/readme.md
 - https://github.com/NVlabs/FoundationPose/blob/main/estimater.py
+
+## 2026-11-19 · 追问：该项目有仿真实验吗？
+
+**结论**：有 Isaac Sim 合成数据仿真（70–90 个物体/场景，自由落体/碰撞，2 台半球相机，0–5 灯，662 HDR 图，约 600K 场景和 1.2M 图像），主要用于 Refiner / Scorer 训练。论文正式测试在五个真实采集数据集上完成，并没有报告机械臂在 Isaac Sim 中做在线抓取、移动视角与闭环控制的独立实验。Figure 7 的 1M 样本附近性能趋缓是**合成训练规模对真实 YCB-Video 泛化性能**的影响。
+
+**官方开源边界**：可获取合成数据和推理代码；未在仓库找到完整 600K 场景 Isaac Sim 生成脚本。公开模型权重缺少 diffusion 纹理增强数据的训练。
+
+已在[中文精读第九节](explainer.zh-CN.md)补充精确场景参数、论文实验的证据边界与建议复现方案。
+
+**论文位置**：https://arxiv.org/html/2312.08344 (§3.1, §4, Appendix §5.2)
