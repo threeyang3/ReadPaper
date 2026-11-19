@@ -134,3 +134,35 @@ datasets/isaac_sdfr/
 
 - 2026-11-19：已提出研究路线并核对代码/官方文档。
 - **未开始**仿真环境安装、代码复现、实验运行或性能验证。
+
+## 9. 2026-11-19 先行工作审查：方向 A 并非新颖的研究主张
+
+**触发问题**：用户指出“鲁棒 SDF + 不确定性 / 可见性加权”似乎已在 ReadPaper 中读过；重新查验仓库中已归档的 GFLA、Active 6D Pose、FoundationPose 精读笔记，并查阅外部 RNNPose、UA-Pose、SDFit 与 BayesSDF 资料。
+
+### 9.1 仓库已有的直接重叠思想
+
+| 已归档论文 | 已有实现 / 思想 | 与拟议 A 的关系 | 不能混同的环节 |
+|---|---|---|---|
+| [GFLA（T-RO 2026）](../../../grasping/doi-10.1109-tro.2026.3715994/notes/explainer.zh-CN.md) | VASS 可见性感知软监督：按可见/未见区域和表面距离给 **SDF 的体素级训练损失**加权；用户曾详细追问创新点 2 | **概念重合度最高**：弱化不可靠几何信息影响 | GFLA 训练场景几何 SDF，SDFR 在**推理时**固定已知 CAD SDF 并更新 SE(3) |
+| [Active 6D Pose（2025/26）](../../../active-perception/arxiv-2503.03726/notes/explainer.zh-CN.md) | 使用网络预测的二维中心协方差 \(\Sigma_{u,k}\)，最小化 \(\sum r_k^\top\Sigma_{u,k}^{-1}r_k\) | **优化层面很接近**：观测质量差则减小其位姿优化权重 | 加权的是多帧二维中心重投影残差，而非点到三维 SDF 的残差 |
+| [FoundationPose（CVPR 2024）](../../arxiv-2312.08344/notes/explainer.zh-CN.md) | Render-and-Compare Refiner/Scorer；其笔记第 10–11 节还整理 UA-Pose 和不完整模型/置信度研究 | 说明位姿估计的可信度、深度质量、模型不确定性早已是活跃问题 | FoundationPose 主 refiner 不是 SDFR 式在线逐点 SDF 残差优化；排序分数≠校准概率 |
+
+**结论**：此前将“鲁棒损失 + 每点可靠性加权”评为最有学术创新潜力，过度乐观。它仍是值得实现的工程基线与控制变量，但不能未经新颖性调查就宣称研究创新。
+
+### 9.2 仓库外必须对比的已发表 / 公开工作
+
+- [RNNPose（TPAMI 2024）](https://doi.org/10.1109/TPAMI.2024.3360181)：利用图像与 CAD 描述子的对应一致性检查，对不可靠的对应关系降权并在可微 LM 中优化位姿。**直接覆盖“坏测量降权、鲁棒位姿优化”范式**，只是残差来源不是 SDF。
+- [UA-Pose（CVPR 2025）](https://openaccess.thecvf.com/content/CVPR2025/html/Li_UA-Pose_Uncertainty-Aware_6D_Object_Pose_Estimation_and_Online_Object_Completion_CVPR_2025_paper.html)：区分已观测 / 未观测参考几何，估计不确定性并指导在线补全；不是同一个 SDFR 任务，但“模型不确定性”已有先例。
+- [SDFit（ICCV 2025）](https://openaccess.thecvf.com/content/ICCV2025/html/Antic_SDFit_3D_Object_Pose_and_Shape_by_Fitting_a_Morphable_ICCV_2025_paper.html)：可变形 SDF + mask/normal/depth 联合渲染比较，迭代优化形状和位姿，说明简单叠加图像约束也不独创。
+- [BayesSDF（2025 预印本）](https://arxiv.org/abs/2507.06269)：显式估计神经 SDF 的表面/模型不确定性，提醒“模型几何不确定性”也不是空白；其主任务不是 SDFR 刚体 pose refinement。
+
+以上并不意味着每篇都解决同一个实验问题，而是已有方法足以要求更严格的差异和基线。没有确认“某某首次”主张。
+
+### 9.3 修订后的研究决策
+
+- **保留 A 作为工程基础与消融**：B0 原始 SDFR 的 L1、B1 标准 robust M-estimator、B2 可见性/掩码置信加权、B3 多视角/时序一致性。这些默认都是 prior-art-inspired baseline，不作为独立贡献。
+- **先构造原法失败模式，再提出差异化科学问题**。值得测试但不预设新颖性的假设包括：(i) 同时传播观测协方差和神经 SDF 几何不确定性至位姿残差；(ii) 可见性、遮挡边界与自由空间约束下的错误置信识别；(iii) 在固定/腕部相机自遮挡中检测位姿不可辨识并拒绝不安全动作。每项都需要对照 UA-Pose / RNNPose / 原始 SDFR，并进一步做 2026 年先行工作检索。
+- **避免概念迁移误当贡献**：将 GFLA 的 VASS 改成 SDFR 的在线点权重，仅是训练/推理阶段的迁移；将 Active 6D 的协方差权重改成 SDF 残差权重，也不能自动认为新颖。若无具有区别的模型、理论约束和严谨消融，属于已有方法组合。
+- **研究排序更新**：先复现 + 失败诊断（确定性工作）；其次验证“观测噪声 vs SDF 模型误差 vs 姿态不可观测性”的可区分性与评价指标；最后才确认是否有真正可发表的创新角度。
+
+**备注**：方向 A 最初记录在本文件第 2–3 节，现在保留作为历史方案，不覆盖；以后谈创新优先参考本第 9 节的修订结论。
