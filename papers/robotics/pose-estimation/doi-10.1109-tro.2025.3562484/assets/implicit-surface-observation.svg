@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 350" role="img" aria-label="Observed 3D points are derived from depth pixels, while implicit surface is a zero-level set of a learned SDF">
+<rect width="1120" height="350" rx="20" fill="#f6faff"/>
+<text x="38" y="43" fill="#19324f" font-family="Arial,sans-serif" font-size="26" font-weight="700">From a camera pixel to an implicit surface</text>
+<rect x="27" y="66" width="327" height="244" rx="14" fill="#fff" stroke="#c8d9ee" stroke-width="2"/>
+<text x="44" y="94" fill="#2e639f" font-family="Arial,sans-serif" font-size="18" font-weight="700">1 · Depth image</text>
+<rect x="62" y="113" width="248" height="137" rx="9" fill="#dce7f2"/>
+<ellipse cx="185" cy="179" rx="86" ry="55" fill="#88b4d9" stroke="#4678b8" stroke-width="3"/>
+<path d="M62 154H310 M62 193H310 M104 113V250 M160 113V250 M216 113V250 M272 113V250" stroke="#fff" stroke-width="1" stroke-opacity=".45"/>
+<rect x="161" y="154" width="55" height="39" fill="#f6bd61" fill-opacity=".8" stroke="#d6912a" stroke-width="2"/>
+<text x="186" y="279" font-family="Arial,sans-serif" font-size="15" fill="#54708d" text-anchor="middle">pixel (u,v) + depth z</text>
+<path d="M355 188H407" stroke="#4e86bd" stroke-width="4" fill="none"/><path d="M409 188l-14-9v18z" fill="#4e86bd"/>
+<rect x="414" y="66" width="295" height="244" rx="14" fill="#fff" stroke="#c8d9ee" stroke-width="2"/>
+<text x="431" y="94" fill="#2e639f" font-family="Arial,sans-serif" font-size="18" font-weight="700">2 · Observed 3D points</text>
+<path d="M463 262H673 M480 278L629 120 M475 268V118" stroke="#9daec1" stroke-width="1.6" fill="none"/>
+<g fill="#de9535">
+<circle cx="514" cy="224" r="4"/><circle cx="521" cy="210" r="4"/><circle cx="528" cy="196" r="4"/><circle cx="538" cy="176" r="4"/><circle cx="553" cy="160" r="4"/><circle cx="568" cy="157" r="4"/><circle cx="584" cy="164" r="4"/><circle cx="602" cy="178" r="4"/><circle cx="613" cy="196" r="4"/><circle cx="621" cy="215" r="4"/><circle cx="615" cy="229" r="4"/><circle cx="600" cy="240" r="4"/><circle cx="583" cy="243" r="4"/><circle cx="562" cy="243" r="4"/><circle cx="544" cy="237" r="4"/><circle cx="531" cy="231" r="4"/>
+</g>
+<circle cx="568" cy="157" r="8" fill="none" stroke="#e07c2a" stroke-width="1.8"/>
+<text x="562" y="279" font-family="Arial,sans-serif" font-size="15" fill="#54708d" text-anchor="middle">P_i = (x_i, y_i, z_i) · many points</text>
+<path d="M710 188H758" stroke="#4e86bd" stroke-width="4" fill="none"/><path d="M760 188l-14-9v18z" fill="#4e86bd"/>
+<rect x="765" y="66" width="328" height="244" rx="14" fill="#fff" stroke="#b2d9cb" stroke-width="2"/>
+<text x="782" y="94" fill="#16836a" font-family="Arial,sans-serif" font-size="18" font-weight="700">3 · Implicit CAD surface</text>
+<path d="M842 230 Q815 177 842 142 Q870 110 923 134 Q959 105 991 140 Q1030 178 996 223 Q953 261 904 239 Q863 259 842 230Z" fill="#78c8a9" fill-opacity=".14" stroke="#168d77" stroke-width="4"/>
+<path d="M830 247 Q800 181 825 128 Q863 92 927 113 Q965 88 1014 127 Q1051 173 1017 241 Q961 282 906 262 Q856 276 830 247Z" fill="none" stroke="#83beac" stroke-dasharray="5 6" stroke-width="2"/>
+<g fill="#d99536"><circle cx="812" cy="147" r="5"/><circle cx="848" cy="139" r="5"/><circle cx="943" cy="125" r="5"/><circle cx="1000" cy="196" r="5"/><circle cx="864" cy="239" r="5"/></g>
+<text x="926" y="279" font-family="Arial,sans-serif" font-size="16" fill="#16836a" text-anchor="middle">f_theta(x) = 0 is the surface</text>
+<text x="1048" y="331" font-family="Arial,sans-serif" font-size="12" fill="#5b718a" text-anchor="end">Original educational illustration; not a paper figure</text>
+</svg>
