@@ -2,6 +2,10 @@
 
 > **文档性质**：研究选题建议与尚未实施的实验计划；不是原始 SDFR 论文已经完成的实验或结论。依据作者公开代码及 2026-11 核对的 Isaac Sim 官方文档，并参考 RNNPose、UA-Pose、SDFit 等相关工作。**当前尚未搭建仿真、训练模型或实际测量性能。**
 
+## 2026-11-19 执行版详尽协议
+
+参见 [实验协议 v1（H1/H2/Isaac/Gates）](experimental-protocol-v1.zh-CN.md) 与 [YAML 参数蓝图](experiment-config.v1.yaml)。此前方向 A 的原始排序仅作为历史建议，已由先行工作审查修订。
+
 ## 总体建议
 
 先用作者 PyTorch3D 流程复现 **SDFR / ICP / FRICP / SymmICP** 同条件基线，再构建 Isaac Sim 可控 RGB-D 数据集，最后推进 **深度质量与可见性感知的鲁棒 SDF 位姿优化**。切忌直接把“Huber 替换 L1”当作足够新颖的论文贡献；应在深度/掩码不确定性建模、可见性、可辨识性、收敛稳健性和多场景泛化上构造实质性问题与贡献。
@@ -12,7 +16,7 @@
 - 旋转用 `so3_log_map` / `so3_exp_map`，平移用 `trg_pts.mean(dim=1)` 初始化；Adam 分别优化，固定 100 次循环，无基于收敛的早停。
 - 可选的最远点采样是 150 点；噪声模式下 `run_sdfr.py` 关闭 FPS。应评估极少有效点、混入背景点时的取样偏差。
 - 数据生成 `prepare_dataset.py` 使用渲染深度、受控随机位姿误差；`corrupt` 以 RandomErasing、法线视角删点模拟缺失，非光学反射传感器物理模拟。
-- 重要工程检查：`run_sdfr.py` CLI 提供 `diverse/corrupt` 选项，但其 `eval_SDFR` 遍历条件目前仅显式涵盖 `standard/noise/scale`；扩展测试前须补上并写回归测试。
+- **2026-11-19 源码纠错**：`run_sdfr.py` 的 `diverse/corrupt` 模式可进入运行循环；`if mode=='standard' or mode=='noise' or mode=='scale'` 只限制三类模式下的**模型过滤**，不代表整体跳过其他模式。首次运行前做回归核验，但无需凭该误判修改调度。
 - 数据生成脚本的 `--root-dir` 当前有与局部硬编码变量不同步的风险；检查并消除。检查 CAD 模型以 mm 导入、渲染按 m 输出、在线模型点乘 `obj_scale*1000`，以及 `T_{wc}` 与 `T_{cw}`。
 
 ## 2. 候选课题及排序
