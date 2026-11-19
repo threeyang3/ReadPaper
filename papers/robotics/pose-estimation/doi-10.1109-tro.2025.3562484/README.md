@@ -27,6 +27,7 @@ tags: [robotics, 6d-pose, pose-refinement, sdf, implicit-neural-representation, 
 - [对话记录与后续补充](notes/dialogue.md)
 - [仿真与 SimReal 实验设计（含源码参数核对）](notes/simulation.zh-CN.md)
 - [SDFR 后续研究路线：鲁棒优化、Isaac Sim 与消融方案](notes/research-roadmap.zh-CN.md)
+- **[详尽研究与仿真实验协议 v1](notes/experimental-protocol-v1.zh-CN.md)** · [参数配置蓝图](notes/experiment-config.v1.yaml)
 - [研究路线图](assets/research-roadmap.svg)
 - [仿真实验流程图](assets/simulation-design.svg)
 - [ICP 与 SDF 思路对照图](assets/icp-vs-sdf.svg)
