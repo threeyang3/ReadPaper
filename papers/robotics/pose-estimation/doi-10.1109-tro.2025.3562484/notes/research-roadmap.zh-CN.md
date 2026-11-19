@@ -166,3 +166,86 @@ datasets/isaac_sdfr/
 - **研究排序更新**：先复现 + 失败诊断（确定性工作）；其次验证“观测噪声 vs SDF 模型误差 vs 姿态不可观测性”的可区分性与评价指标；最后才确认是否有真正可发表的创新角度。
 
 **备注**：方向 A 最初记录在本文件第 2–3 节，现在保留作为历史方案，不覆盖；以后谈创新优先参考本第 9 节的修订结论。
+
+## 10. 2026-11-19 新一轮系统文献调研：从通用鲁棒性转向可检验创新
+
+> **本节更新此前第 2、3、9 节的推荐优先级**，并不删除历史方案。调研来源包括作者 SDFR 源码、ReadPaper 的 GFLA/Active 6D Pose/FoundationPose 精读，以及截至 2026-11-19 的 CVPR/ICCV/WACV/IROS/ICRA 2025–2026 和预印本。尚未运行实验、不能保证新颖性或性能提升。当前列出的“候选贡献”属于研究假设，需后续进一步查新与实测。
+
+### 10.1 相关工作与直接竞争
+
+| 先行研究 | 已有能力 / 研究问题 | 对 SDFR 选题的限制 |
+|---|---|---|
+| [GFLA/VASS (T-RO 2026)](../../../grasping/doi-10.1109-tro.2026.3715994/notes/explainer.zh-CN.md) | SDF 训练阶段可见性软监督 | “按可见性加权”不是新概念；但作用阶段不同 |
+| [Active 6D Pose](../../../active-perception/arxiv-2503.03726/notes/explainer.zh-CN.md) | 观测协方差加权重投影、多峰位姿和 NBV | 简单 SDF 残差加权、多视角/NBV 不能当首创 |
+| [RNNPose (TPAMI 2024)](https://pubmed.ncbi.nlm.nih.gov/38289852/) | 在位姿优化中对错误对应降权 | 鲁棒加权的位姿精修有先例 |
+| [WALDO (WACV 2026)](https://openaccess.thecvf.com/content/WACV2026/papers/Pakdamansavoji_WALDO_Where_Unseen_Model-based_6D_Pose_Estimation_Meets_Occlusion_WACV_2026_paper.pdf) | 遮挡下可见区域动态采样、多假设、迭代 refinement | 这些模块不能当作独创 |
+| [SDFit (ICCV 2025)](https://openaccess.thecvf.com/content/ICCV2025/html/Antic_SDFit_3D_Object_Pose_and_Shape_by_Fitting_a_Morphable_ICCV_2025_paper.html) | 可变形 SDF + mask/depth/normal 等渲染证据优化形状与位姿 | SDF+RGB / 模型在线适配并非空白 |
+| [BOP-Distrib (WACV 2026)](https://cea-list.github.io/BOP-Distrib/) | 每图像可见性诱发的多模态姿态真值与分布评价 | “发现/输出多姿态”不是独创；该评价工具可作为基线 |
+| [WALDO/ActivePose (2025)](https://arxiv.org/abs/2509.11364) | 基于姿态歧义的主动相机视角与跟踪 | NBV + 模糊消歧有直接先例 |
+| [GPD-AP (ICRA 2026)](https://doi.org/10.1109/ICRA57385.2026.11695783) | 抓取姿态驱动的主动感知与困难遮挡测试 | “抓取任务导向视角选择”已有工作 |
+| [Deterministic Object Pose Confidence Region Estimation (ICCV 2025)](https://openaccess.thecvf.com/content/ICCV2025/html/Wang_Deterministic_Object_Pose_Confidence_Region_Estimation_ICCV_2025_paper.html) | 共形校准关键点区域，再传播至 6D 置信区域 | 仅增加位姿置信区域不足首创 |
+| [Pose accuracy is not grasp reliability (2026)](https://arxiv.org/abs/2609.13235) | 位姿残差后验与模拟抓取风险 | “pose 不等于 grasp risk”已有直接论证 |
+| [Gradient-SDF (CVPR 2022)](https://openaccess.thecvf.com/content/CVPR2022/html/Sommer_Gradient-SDF_A_Semi-Implicit_Surface_Representation_for_3D_Reconstruction_CVPR_2022_paper.html) | 显式存储梯度并用于 SDF tracking 和光度 BA | “SDF 加梯度”不是首次 |
+| [BayesSDF (ICCV 2025 Workshop)](https://arxiv.org/abs/2507.06269) | 神经 SDF 几何不确定性与 Hessian/Laplace | “SDF 本身有不确定性”不是首次 |
+| [DualPP (2026)](https://doi.org/10.1016/j.cad.2026.104113) | 自监督 SDF 值与梯度精度改进 | 改进 SDF 梯度也已有先例，必须聚焦下游 pose 目标 |
+| [CRISP (CVPR 2025)](https://openaccess.thecvf.com/content/CVPR2025/papers/Shi_CRISP_Object_Pose_and_Shape_Estimation_with_Test-Time_Adaptation_CVPR_2025_paper.pdf) | 测试时形状/姿态联合纠正 | CAD 模型偏差的形状适配已有先行工作 |
+| [CausalPose (2026)](https://doi.org/10.1016/j.patcog.2026.113905) / [KineFuse (IROS 2026)](https://rasevents.org/uploads/documents/pdfviewer/f2/6e/232157-4134.pdf) | 视觉–触觉可靠性融合、手内遮挡姿态跟踪 | 简单加入触觉+动态权重也非新 |
+| [SyncHeC (2026 preprint)](https://arxiv.org/abs/2611.02999) | 空间外参和时间偏差的连续联合标定 | “矫正腕相机标定与延迟”不能直接宣称无先例 |
+
+### 10.2 研究候选排序（收敛到 3 项）
+
+**候选 1｜面向下游位姿优化的神经 SDF 梯度质量与可控更新（优先做第一项探索）**
+
+源代码事实：[lib/trainer.py](https://github.com/pangbo1997/SDFR/blob/master/lib/trainer.py) 的 `step_geometry` 主要对每级 SDF 值使用 `((pred-gts)**2).sum()` 训练；[sdfr.py](https://github.com/pangbo1997/SDFR/blob/master/sdfr.py) 在线使用 `mean(abs(sdf))` 对 `SE(3)` 位姿求导更新。即训练主要约束数值，推理的改进方向依赖 `∇f_theta`；这构成值得量化的目标不一致，但**目前未证明它造成了显著性能瓶颈**。
+
+位姿局部雅可比：
+```math
+J_i = \frac{\partial f_\theta(T^{-1}p_i)}{\partial\xi}
+= \nabla f_\theta(x_i)^{\top} \frac{\partial x_i}{\partial\xi}.
+```
+
+研究假设：SDF 数值 MSE 小，不代表局部梯度方向、局部优化条件数或迭代轨迹足够适合姿态估计。可做：
+- exact mesh SDF/法向（Oracle） vs 原版 `OctreeSDF`；
+- 数值误差、梯度方向误差、非表面区域有效梯度范围、SDF 损失下降曲线、ADD-S、位姿收敛盆地；
+- grad/eikonal supervised SDF + 带梯度可信半径的位姿更新；与 Gradient-SDF/DualPP 对比；
+- 若 exact mesh 与 learned SDF 的位姿精度和收敛盆地几乎一致，**放弃这条主线**。
+
+创新差异需要聚焦 **downstream pose loss 与稳定 SE(3) 修正**，不能只提“新的梯度监督”。
+
+**候选 2｜部分可见场景下的可辨识性、真实位姿风险与拒绝/补充观测决策（更偏具身）**
+
+研究切口不是简单“置信度高低”，而是区分：
+1) 数据是真的不支持唯一姿态（几何对称 / 遮挡）；
+2) SDF 梯度几何误差导致解偏移；
+3) 有信息却因坏初值而卡在局部极值。
+
+可先对每次 SDFR 优化计算局部信息矩阵 `H ≈ J^T W J` 的谱及多个初始旋转解的分歧，结合 mask/depth consistency，而不是只用 SDF loss 判定成功；在可观测性不足时输出保守的候选解/集合或 abstain，交由下一次观测处理。必须对照 [BOP-Distrib](https://cea-list.github.io/BOP-Distrib/)、[ICCV 2025 6D confidence regions](https://openaccess.thecvf.com/content/ICCV2025/html/Wang_Deterministic_Object_Pose_Confidence_Region_Estimation_ICCV_2025_paper.html) 与 [pose posterior grasp risk (2026)](https://arxiv.org/abs/2609.13235)。单一局部 Hessian 对多峰歧义无能为力；应检验多初值与对称群。
+
+若用户线缆穿孔相关，任务相关指标应从总体 ADD 转向 **孔轴/钩面/穿线路径关键位置的容差**（只选择环境刚体为 SDF 目标，不把柔性线缆当刚体）；实验需要防止“用了 GT 姿态做安全判别”的泄漏。
+
+**候选 3｜时间预算受限的多视角与机器人自遮挡下的可信 6D 精修（系统性扩展）**
+
+固定相机+腕相机共用 `T_{world, camera}`；同步、手眼标定、抓手遮挡与动作引起的深度失效会耦合。候选问题：是否能用**当前 SDF 几何的方向性信息缺口**决定继续 refine、等待新帧、切换相机、重新观察还是取消接触动作，并把运动耗时与任务容差计入规划？
+
+此方向与 ActivePose/GPD-AP/Active 6D/SyncHeC 等高度相关；只有证明在同输入、同相机预算、同总时延及强对照条件下有新的机制与可观收益，才可能形成新的论文贡献。开始阶段只作为**验证平台扩展**而不是直接作为主创新。
+
+### 10.3 先做一个能否决题目的最小诊断实验
+
+- 2–3 个 CAD：非对称、有接触细节/小孔、近似对称。
+- **同一真值点云/初始扰动**下，三种 SDF 表示：精确 CAD 距离查询（作为性能上限）、官方 OctreeSDF、增加 Eikonal/法向梯度监督的 SDF。
+- 同一优化器与点数预算：对比 `|f-d_CAD|`、梯度角误差、下降方向余弦、姿态估计 P50/P95、成功率、初始化盆地、耗时。
+- 错误分析分层：无遮挡/部分遮挡、点云污染、真实 CAD 偏差、几何近对称。
+- **决策门槛**：若“更优 SDF 梯度”并不明显改善 pose 性能，转入候选 2 的不可观测性与风险；若确有强因果关系，再设计 pose-aware training 或 adaptive trust-region。不要先安装 Isaac Sim 才开始测。
+- 若发现纯深度真值都不足以确定正确解，必须改进观测或输出不确定性，**不能要求优化器从无信息中恢复真值**。
+
+### 10.4 论文贡献形成条件
+
+1. 比过去方法真正多回答一个问题（不是简单模块组合）。
+2. 不只是平均 ADD 小，还应显示统计可靠的失败案例改善、收敛盆地及计算成本。
+3. 与 SDFR、Exact SDF、Gradient-SDF/DualPP、FoundationPose、WALDO 等强而公平的基线对照，按任务约束选择子集。
+4. 在纯合成和真实/半真实观测中都验证，明确可用真值的阶段；方法不能依赖测试集 GT 预测信心。
+5. 不声称已验证原创性：上述只是较完整查新后的**候选假设**，严格 novelty 还要结合最新版综述、论文全文及精确引文网核查。
+
+### 10.5 本轮明确建议
+
+**先实施“候选 1 的最小诊断实验”，而不是直接把候选 1 写成新算法。** 它最接近 SDFR 的研究对象，能用已有 CAD/PyTorch3D 做快速假设筛选。候选 2 作为具身操作方向备选；候选 3 作为后期 Isaac Sim 系统验证路线。**截至当前只有调研与设计，没有运行任何仿真、训练或实验。**
