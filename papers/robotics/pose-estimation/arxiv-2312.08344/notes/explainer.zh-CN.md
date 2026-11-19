@@ -184,6 +184,52 @@ $$
 
 **注意**：原 demo 可能清空 debug_dir 下已有文件，不要把重要资料目录传进去。此文仅为读码分析，不代表已验证可在用户的 GPU/Ubuntu 环境直接安装。
 
+## 九、Isaac Sim 仿真训练与真实数据评测的区别（2026-11-19 补充）
+
+**结论**：FoundationPose 确实使用 **NVIDIA Isaac Sim** 的物理模拟与 path tracing 生成大规模合成训练数据；但论文 §4 主评测在 LINEMOD、Occluded-LINEMOD、YCB-Video、T-LESS、YCBInEOAT **真实采集数据集**上完成。没有报告机械臂在仿真里在线执行抓取、运动规划、主动移动相机的完整闭环评测。不能把「仿真训练」等同于「机器人仿真验证」。
+
+### 9.1 场景设计（正文 §3.1 + 附录 §5.2）
+
+| 要素 | 论文报告的设置 |
+| --- | --- |
+| 引擎与画质 | NVIDIA Isaac Sim，重力与碰撞仿真，path tracing |
+| 三维素材 | Objaverse（Objaverse-LVIS >40,000 物体、1156 类）+ Google Scanned Objects |
+| 物体布置 | 每个场景随机选 70–90 个物体，放在带隐形围墙的平台，模拟自由落体和相互碰撞，待物体速度低于阈值 |
+| 物体尺寸 | 随机缩放到 5–30 cm |
+| 承载平台 | 尺寸 1–1.5 m |
+| 相机 | 每场景 2 个；平台上方半球采样，半径 0.2–3.0 m |
+| 光照 | 0–5 灯，位置/尺寸/颜色/强度/色温/曝光随机 |
+| 环境 | 662 张 Poly Haven HDR，dome light 方向随机 |
+| 材质 | 金属度、反射、对象与平台纹理随机；论文还使用 LLM + diffusion 语义纹理增强 |
+| 标注 | RGB、Depth、Mask、相机位姿/内参、物体 6D 真值、2D bbox |
+| 数据规模 | 约 **600,000 场景，1,200,000 图像** |
+
+~~~mermaid
+flowchart TD
+A[Objaverse / GSO] --> B[物体几何/尺寸/纹理随机]
+B --> C[Isaac Sim: 70–90 个物体掉落/碰撞至静止]
+C --> D[随机 2 相机 + 0–5 灯 + HDR]
+D --> E[RGB-D + Mask + 6D 位姿等真值]
+E --> F[Refiner/Scorer 训练]
+F --> G[真实数据集上的 Sim-to-Real 测试]
+~~~
+
+### 9.2 训练方法 vs 实验验证
+
+- Refiner 和 Scorer 先分别训练，再联合微调 5 epochs；附录报告 4 × NVIDIA V100、约一周的合成训练。
+- 训练 Refinement 时给 GT 位姿加平移扰动，XYZ 方向量级约 0.02 / 0.02 / 0.05 m，旋转约 20°；渲染与真实 crop 经 160×160 预处理。**这些是训练扰动，非机械臂控制噪声**。
+- 论文 Figure 7 在真实 YCB-Video 上评价不同合成训练数据量，约 1M 图像附近增益趋缓。这是使用仿真训练数据后进行真实世界泛化评测，而不是仿真内的机器人运动实验。
+- GitHub README 提供合成数据下载和相机参数解析，仓库公开内容中**未发现完整 Isaac Sim 场景生成脚本**；不能据此声称可以一条命令复现 600K 场景。
+- README 明确公开权重未使用论文方法中扩散纹理增强的数据，性能可能略有差异，论文结果与开源版本不可无条件视为完全相同。
+
+### 9.3 Isaac Sim 最小复现思路（研究建议，非论文已完成实验）
+
+先用单个已知 CAD 的静态刚体构造 RGB/Depth/GT Mask/K/GT pose，复现 model-based 的初始化与逐帧 tracking；在此基础上逐步增加多物体遮挡、深度缺失、腕相机运动、坐标转换与失效后的重新注册。真正闭环抓取需要机械臂运动规划和控制模块，属于新的验证工作。
+
+**一手来源**：[原文 §3.1、§4、附录 §5.2](https://arxiv.org/html/2312.08344)；[NVlabs 官方 readme.md](https://github.com/NVlabs/FoundationPose/blob/main/readme.md)。
+
+---
+
 ## 核心总结
 
 1. FoundationPose 的主体是可迁移的 **render-and-compare：多姿态初始化 → learned refiner → hierarchical scorer**；
