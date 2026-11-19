@@ -28,6 +28,10 @@ tags: [robotics, pose-estimation, pose-tracking, RGB-D, foundation-model, render
 
 - [6D 位姿估计为何仍在发展、FoundationPose 缺陷、社区记录与改进路线](notes/explainer.zh-CN.md#review-2026-11-19)：包括 2026 新官方推理库、后续论文、可靠性/遮挡恢复方案与公平实验设计。
 
+## 2026-11-19 后续论文与创新边界
+
+- [可靠性、失跟恢复已有工作与可验证的选题](notes/explainer.zh-CN.md#recovery-prior-art-2026-11-19)：STORM、RGBTrack、RRTrack、TEG-Track、V-HOP、位姿置信区域与任务风险；收紧上一轮建议，并给出强基线和最小实验。
+
 ## 阅读入口
 
 - [详细中文精读、源码核对与复现方案](notes/explainer.zh-CN.md)

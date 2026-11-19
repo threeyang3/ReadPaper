@@ -363,6 +363,8 @@ GearTrack 的 2024 arXiv v1 已组合 SAM2、FoundationPose 和 LightGlue 并处
 
 ### 10.6 改进方向优先级
 
+> **选题更新（2026-11-19）**：以下为第一轮方向建议；本次进一步发现 STORM、RGBTrack、RRTrack、TEG-Track 等直接先行工作。请结合[第十一节的创新边界与强基线](#recovery-prior-art-2026-11-19)阅读，勿将原版缺项直接视为研究空白。
+
 | 优先级 | 方向 | 具体做法与评价要求 |
 | --- | --- | --- |
 | P0 | 输入和可复现运行时 | 统一尺度、标定、RGB-D 对齐与时间戳；比较原版和新运行时。这是实验基础 |
@@ -507,3 +509,184 @@ $$
 [^r19-uapose]: UA-Pose，§3与附录F：https://arxiv.org/html/2506.07996v1 。
 [^r19-point2pose]: Point2Pose 摘要：https://arxiv.org/abs/2604.10415 ；作者项目：https://point2pose.github.io/ 。
 [^r19-geartrack]: GearTrack arXiv v1，标题随版本变化：https://arxiv.org/html/2409.19986v1 。
+
+
+<a id="recovery-prior-art-2026-11-19"></a>
+
+## 十一、2026-11-19 追问：哪些缺陷已有改进，可靠性与失跟恢复还能创新什么？
+
+> **对第十节选题建议的收紧。**“FoundationPose 原版没有某个模块”只能证明工程缺口，不能证明截至 2026 年该方向仍是研究空白。自动恢复、学习式失效验证、自适应阈值、触觉融合、位姿置信区域和任务风险都已有直接先行工作。下面区分论文已完成的内容、证据边界和待验证研究假设。调研截止 2026-11-19；未执行任何 GPU 或机器人实验。
+
+### 11.1 哪些宽泛改进已经有人做？
+
+| 原版缺口或常见想法 | 最接近的先行工作 | 对选题的含义 |
+| --- | --- | --- |
+| 自动获取 mask、目标再现后重注册 | SuperPose（旧题 GearTrack，2024），STORM（ICML 2026） | 仅接分割器和重新初始化，创新不足 |
+| 加 2D tracker、Kalman、状态机 | RGBTrack（IROS 2025）；社区 FoundationPose++ | 已有明确实现；仍可作为工程基线 |
+| 学一个失败检测器、时序平滑后触发恢复 | STORM | “增加 verifier”本身已被覆盖 |
+| 渲染轮廓验证、可靠记忆、自适应阈值、双模板库恢复 | RRTrack（2026 预印本） | 不能只换模块组合名称 |
+| RGB-only 跟踪，减轻深度传感器依赖 | RGBTrack | 真尺度 CAD 与未知尺度分支的条件应分开 |
+| 部分模型、不确定性、在线补全 | UA-Pose（CVPR 2025）[^r19b-ua] | 不完整几何与低置信补全已有直接研究 |
+| 无 CAD、多目标、完全遮挡后恢复 | Point2Pose（ECCV 2026） | 输入先验不同，不能直接横排精度 |
+| FoundationPose 融合触觉/运动学 | V-HOP（RSS 2025）、ViTa-Zero（ICRA 2025）、KineFuse（IROS 2026） | 需与现有多模态方法比较 |
+| 根据滑移切换运动估计并融合视觉 | TEG-Track（RA-L 2024；2023 在线） | 滑移检测和切换预测器也已做过 |
+| 根据不确定性选视觉/触觉 | HIVE-6D（RA-L 2026） | 模态切换本身不新 |
+| 位姿置信区域、将位姿误差转成抓取风险 | Deterministic Object Pose Confidence Region Estimation；残差后验抓取论文 | 不能笼统声称首次做置信度或任务风险 |
+| 固定与机器人相机融合、主动选视角 | Naik 等的多视角分布跟踪；Active 6D Pose | 研究需进一步落实到动态交互和恢复代价 |
+
+来源见下文对应文献。这里的“已有改进”不代表这些问题在所有对象、传感器和操作任务上已经解决。
+
+### 11.2 “可靠性与失跟恢复”已有直接后续论文
+
+**SuperPose（arXiv:2409.19986v2，2024，预印本）**是第十节 GearTrack 的同一论文后续标题。它结合 SAM2、LightGlue 和 FoundationPose，通过分割位置与位姿投影偏差触发重注册，并保存参考图处理长期目标丢失。因此，SAM2 + mask 一致性 + reinitialize 是已知路线。[^r19b-superpose]
+
+**RGBTrack（arXiv:2506.17119，IROS 2025）**使用 XMem、Kalman 和状态机，发现 mask/中心异常后在预测附近重新采样姿态、细化和排序。它有 RGB 与 RGB-D 版本；RGB-only 主设定要求真实尺度 CAD，未知尺度恢复另依赖初始深度估计。遮挡恢复仍依赖 2D 跟踪质量。[^r19b-rgbtrack]
+
+**STORM（arXiv:2511.09771v3，ICML 2026）**是“学习失效判断”最直接的近邻。TOM 学习当前裁剪图与成功记忆的兼容性，经平滑和持续异常判定触发重定位；已在独立验证集选择误报受控的阈值。它验证的是兼容性，不是毫米/角度误差的校准概率。作者明确说明 zero-shot 不等于对象身份不相交泛化，机器人任务仍待拓展。[^r19b-storm]
+
+STORM 标题中的 Single Image 指参考入口。官方 FoundationPose adapter 的 register/track 在缺少 depth 或 intrinsics 时会抛出异常，不能据标题将它视为 RGB-only 推理方案。[^r19b-storm-code]
+
+**RRTrack（arXiv:2607.23669，2026 预印本）**已经结合 2D–6D 验证、质量门控记忆、EMA–MAD 阈值、离线渲染与在线观测模板库恢复。它的 Isaac Sim 基准包含 Franka 抓放和遮挡/再现，因此“做 Franka 仿真遮挡实验”本身不新。其真实无人机实验没有精确 6D 真值，定量与实机证据需要区分。[^r19b-rrtrack]
+
+**Point2Pose（arXiv:2604.10415，ECCV 2026）**从单路 RGB-D 与少量初始点出发，利用长时点对应支持多个未知物体的遮挡后恢复，同时在线重建。作者也说明了部分单对象精度与更广免 CAD 能力的取舍。恢复指再次得到观测后找回，不能解释为完全不可见时仍精确观测到位姿。[^r19b-point2pose]
+
+这些论文已覆盖“判定丢失—重新找目标—恢复 pose”的多种实现。若论文只比较原版首帧初始化后持续 track_one 的 FoundationPose，难以说明相对现有恢复方法的贡献。
+
+### 11.3 可靠性要先定义：排序、验证、置信区域与动作风险不同
+
+| 量 | 实际回答的问题 | 不能直接推导的结论 |
+| --- | --- | --- |
+| 候选排序分数 | 这批假设里哪个更好 | 所有候选都错时，最高分也正确 |
+| 外观/轮廓/深度一致性 | 当前可见观测是否支持这个假设 | 被遮挡结构和歧义旋转也正确 |
+| 兼容性分类器 | crop 和记忆是否属于合理跟踪状态 | 位姿误差低于任务公差 |
+| 位姿分布/置信区域 | 哪些姿态仍可能、区域覆盖频率 | 对每一段动态机器人轨迹均有保证 |
+| 动作风险 | 此刻按该估计执行指定动作的风险 | 仅凭一个 pose 分数即可可靠决策 |
+
+例如杯子只露出圆柱侧面时，多个绕轴角度可以解释当前观测；抓杯身与抓把手对此歧义的要求不同。这是说明问题的几何示例，并非某篇论文的实测结果。
+
+已有三项近邻尤其需要避免忽略：
+
+- **On the miscalibration of object 6D pose estimation methods（HEAI @ IROS 2025 workshop）**直接分析 FoundationPose 等方法的分数饱和和误校准，测试 isotonic regression 后仍见局限。它支持继续研究，但不证明所有后处理无效；相关系数本身也不等于概率校准。[^r19b-miscalibration]
+- **Deterministic Object Pose Confidence Region Estimation（ICCV 2025）**从共形二维关键点区域传播到位姿区域。其关键点/PnP 与交换性假设需要保留，不能直接当作任意 FoundationPose 动态序列的保证。[^r19b-confidence]
+- **Pose accuracy is not grasp reliability: residual pose posteriors improve simulated robotic grasp planning（arXiv:2609.13235v2，2026 预印本）**已冻结 FoundationPose，依据历史残差构造后验并用于抓取选择。证据是实际 LINEMOD 图像加模拟抓取，使用标注可见 mask；后验规划约 10.3 CPU 秒/场景，双视角实验使用标注推导运动。它没有建立真实连续交互中的条件风险保证。[^r19b-posterior]
+
+因此，单纯“给 FP 加置信度”“做 conformal”“学习 pose 残差分布后规划”都过于宽泛。候选差异应落在具体失效事件、因果在线条件、延迟与任务容差上。
+
+### 11.4 多模态和主动恢复也有强近邻
+
+**V-HOP**将 FoundationPose 视觉特征与统一触觉/运动学表示融合，已有跨对象/夹爪评估和实机操作；**ViTa-Zero**利用接触、非穿透和运动学约束在测试时修正视觉位姿。两者分别代表学习融合与物理优化路线。[^r19b-vhop][^r19b-vitazero]
+
+**TEG-Track**更早已显式检测滑移：无滑移时用触觉 marker flow 优化速度，有滑移时由网络预测速度，再联合视觉进行几何/运动学优化。因此，“滑移时撤销固定抓持假设”本身也不是独立创新。其方法与实验没有明确建立失跟后的全局重定位和恢复接受风险评价；这不等于算法绝不可能自然恢复。[^r19b-teg]
+
+**KineFuse**研究结构化手指运动学与触觉融合；量化主要针对 IsaacLab 中已知铅笔状对象，实机演示的证据范围较窄。**HIVE-6D**出版社摘要已明确视觉锚点、触觉修正及 uncertainty-aware routing，并报告实机插接。此次只取得其摘要，不能推断它没有处理滑移或恢复。[^r19b-kinefuse][^r19b-hive]
+
+**ViTaSCOPE**与当前硬件较接近：Franka、双 GelSlim 和固定 D435，联合估计手内姿态与外部接触；作者明确把夹爪内滑移与训练时未知几何列为局限。但一篇论文的局限不能当作整个领域的空白。[^r19b-vitascope]
+
+**Active 6D Pose**已有不确定性驱动的下一视角选择；**Multi-view object pose distribution tracking for pre-grasp planning on mobile robots**已有外部/机器人相机融合、坏视角排除和风险相关抓取决策。后者的真实数据与数字孪生动作验证需分开，不能误称真机闭环抓取已验证。[^r19b-active][^r19b-multiview]
+
+此外，**Robust Pose Estimation through Failure Explanation and Mitigation（ICRA 2026 workshop extended abstract）**已研究检测错误、归因和针对性恢复。因此“按失败原因选恢复”同样需要限定具体新机制。[^r19b-mitigation]
+
+### 11.5 适合当前平台的三个候选切口
+
+以下是基于已核实能力边界提出的**研究假设**，尚未得到新颖性或性能验证。优先固定刚体、已知 CAD、视觉后端，再检验增量；无需一开始兼做对象重建、光学触觉仿真和大模型重训。
+
+#### A. 优先：面向任务容差的连续恢复判定
+
+明确预测事件：
+
+\[
+r_t=P(e_{\mathrm{task}}(\hat T_t,T_t)>\epsilon_{\mathrm{task}}\mid h_{\leq t}),
+\]
+
+其中历史仅包含当前及过去可获取的信息。也可研究短时间窗内误差持续超标的风险，但需要单独定义标签、动作和预测时间范围。
+
+重点样例是“mask 仍正确、目标身份仍正确，但旋转已偏到足以使操作失败”。增加纯外观匹配可能检测不到这种错误；应研究几何、跨视角和接触证据如何减少错误自信。
+
+**与现有工作的区别需要证明：**兼容性验证与真正的 6D 任务公差分开；分布漂移/对象切换后的风险是否仍可用；允许拒绝输出时，是否以相同任务完成率降低错误执行。残差后验论文已处理任务风险，所以优势需落在因果在线、动态接触和实际时延上。
+
+**主要指标：**风险—覆盖率、错误接受率、错误持续时间、发现延迟、任务成功率。只降低错误率却长期拒绝动作的系统不算解决问题。逐帧共形的假设不能直接搬到相关轨迹，先报告经验结果与独立事件/轨迹区间。
+
+#### B. 视觉与触觉运动估计同时退化后的恢复确认
+
+将接触模式转换作为受控失效场景：视觉遮挡同时发生触觉滑移估计失准或接触信息不足，待重新获得观测后，检验系统能否避免把错误对齐当作成功恢复。运动学模式切换是基础组件，已有 TEG-Track 等先行工作。在稳定抓持时可预测：
+
+\[
+{}^W\hat T_{O,t}={}^W T_{G,t}\,{}^G\hat T_{O,t-1}.
+\]
+
+这里的物体—夹爪变换必须带不确定性。发生滑移后若仍强制固定该变换，系统可能给出平滑但错误的姿态。
+
+候选机制包括接触条件化的过程噪声、运动学约束松弛、多姿态假设，以及重现后的视觉/触觉联合确认。腕力可提供事件信息，但不自动唯一确定 6D；两指局部触觉也可能不可观测。
+
+**新颖性不能仅靠滑移检测或模态切换：**须对照 TEG-Track、V-HOP、ViTa-Zero，并核对 HIVE-6D 全文；需要检验相对现有触觉跟踪方法，是否更好地处理“遮挡、滑移和错姿态再捕获”这一连续事件，尤其降低错误恢复而保持可用率。
+
+#### C. 限制时间与动作预算的恢复选择
+
+恢复动作可包括等待下一帧、切换可用相机、增加局部假设、全局重注册或短程观察动作。研究价值在于根据接触模式、任务公差和代价选择动作，而不是每次异常都执行昂贵搜索。
+
+需要显式处理异步重定位返回旧时间戳 pose 的情况；不能将旧位姿当成当前测量。若用腕相机主动改变观察，物体与相机一起运动时可能不能增加有效相对视角，应检查可达性和对象运动。
+
+**与近邻区分：**Active 6D 已做视角信息增益，故应评价恢复收益、动作风险、额外时间和计算预算；与固定周期重注册/固定观察动作做相同预算比较。该路线工程范围较大，适合作为 A/B 成立后的扩展。
+
+### 11.6 先做一个能否立题的小实验
+
+目标：检验已有方法是否会在**看似跟住、实际已不能执行任务**时持续输出可信结果。
+
+1. 选取具有方向性操作要求、又有局部近似对称外观的已知刚体，如带键连接件；增加普通非对称物体作为对照。
+2. 采集无滑移遮挡、无遮挡滑移、遮挡中滑移、再现后错误姿态对齐等完整事件；先在 Isaac Sim 精确控制，再验证真实序列。
+3. 同步固定/腕相机、关节、触觉和力数据；先建立独立真值。可使用不向算法提供的测量装置，不能用待评估 FP 输出当真值。
+4. 原始 FP 之外，至少加入固定周期重注册、RGBTrack 或 STORM 及同输入的几何阈值基线；多模态实验加入可复现的 TEG-Track、V-HOP/ViTa-Zero 或明确标注的适配实现。
+5. 先检查现有方法是否存在稳定复现的漏报或错误恢复，再设计新网络。若强基线已能可靠解决目标事件，应改动问题范围或评价要求，而非只继续叠模块。
+
+#### 公平性与验收
+
+| 项目 | 要求 |
+| --- | --- |
+| 输入条件 | 单相机与双相机、视觉与触觉、真值 mask 与预测 mask 分组；同组保持初值、模型和传感器一致 |
+| 运行条件 | 固定后端和精度，分别统计初始化、跟踪与恢复；记录端到端 p50/p95 延迟 |
+| 数据划分 | 按物体/完整轨迹/事件划分，避免相邻帧随机拆分；阈值在验证集确定 |
+| 时间因果 | 在线算法只看当前和过去；不得以真值告知何时重初始化 |
+| 恢复计时 | 分别记失效发现时间、重新获得有效观测后的恢复时间和完整停机时间 |
+| 正确性 | 平移/旋转误差与适当对称度量；方向敏感任务另定义任务坐标误差 |
+| 可靠性 | 错误接受与错误恢复、漏报、误报、恢复后连续正确时长、拒绝/停机比例 |
+| 任务价值 | 插接/抓放成功、总耗时、额外动作和计算；不能只报告平均 ADD |
+| 统计 | 按独立事件或轨迹给置信区间；避免把强相关帧当作大量独立样本 |
+| 算力安排 | 单卡先录制再重放以控制数据；另做在线闭环验证，量化仿真与推理争用 |
+
+多模态优势必须与同模态基线比较，不能把新传感器的信息增益全部归于网络。模拟二值接触/接触几何也不能直接称为已完成 Xense 光学传感器仿真。
+
+### 11.7 阅读和复现顺序
+
+1. **STORM → RGBTrack → RRTrack**：覆盖学习验证、实用状态机、几何与记忆恢复。
+2. **误校准 workshop → Deterministic Confidence Region → 残差后验抓取**：确定“可靠”究竟指哪个可检验事件。
+3. **TEG-Track → V-HOP → ViTa-Zero → ViTaSCOPE/HIVE-6D**：再决定触觉与接触模式路线。
+4. **Point2Pose**：若目标转向无 CAD、多物体和在线重建，优先读。
+
+截至本次核查，RRTrack README 明示源码、数据与评测脚本尚待发布，不能直接计划为开箱运行基线；UA-Pose 官方仓库也仍待代码发布。STORM、RGBTrack、V-HOP、Point2Pose已有代码入口，但发布不等于已在当前设备验证。FoundationPose++ 作者明确说明没有论文，宜作为社区工程基线。[^r19b-rr-code][^r19b-ua-code][^r19b-fpplus]
+
+**推荐决策：**先验证 A 的错误模式，再引入 B；C 作为后续扩展。与其笼统承诺“提升鲁棒性”，更可检验的目标是：在相同输入和预算下，减少接触/遮挡转换中的错误自信和错误恢复，并提高指定操作的有效完成率。
+
+### 本节一手来源与核查范围
+
+[^r19b-superpose]: SuperPose v2（同 ID 的 v1 题为 GearTrack）：https://arxiv.org/html/2409.19986v2 。
+[^r19b-rgbtrack]: RGBTrack 正文：https://arxiv.org/html/2506.17119v1 ；代码：https://github.com/GreatenAnoymous/RGBTrack 。
+[^r19b-storm]: STORM v3 正文，§3.2、§6、Appendix H：https://arxiv.org/html/2511.09771v3 ；正式 ICML 条目：https://proceedings.mlr.press/v306/deng26a.html 。
+[^r19b-storm-code]: STORM 官方适配器：https://github.com/YuDeng321/STORM/blob/main/storm/adapters.py ，2026-11-19 读取的 blob SHA 为 8e8a5d0b82e2ba4d1d4189a30b93bd430bd0f1e6；本文核对代码接口，未执行运行。
+[^r19b-rrtrack]: RRTrack 正文，§III–IV：https://arxiv.org/html/2607.23669v1 。
+[^r19b-point2pose]: Point2Pose 原始摘要：https://arxiv.org/abs/2604.10415 ；作者项目与 ECCV 标注：https://point2pose.github.io/ 。此处依据摘要/项目页，不声称完整精读其 PDF。
+[^r19b-miscalibration]: Bortolon & Poiesi, On the miscalibration of object 6D pose estimation methods：https://openreview.net/pdf?id=RtYLuxeWR1 ；作者机构记录：https://cris.fbk.eu/handle/11582/370147 。
+[^r19b-confidence]: Deterministic Object Pose Confidence Region Estimation：https://arxiv.org/html/2506.22720v1 ；ICCV 条目：https://openaccess.thecvf.com/content/ICCV2025/html/Wang_Deterministic_Object_Pose_Confidence_Region_Estimation_ICCV_2025_paper.html 。
+[^r19b-posterior]: Sarowar & Kim, Pose accuracy is not grasp reliability，2026-11-01 v2：https://arxiv.org/html/2609.13235v2 ，特别是 §2、§4 的输入、计算与统计限制。
+[^r19b-ua]: UA-Pose：https://arxiv.org/html/2506.07996v1 ；论文针对模型完整性的不确定性不能直接等同任务风险。
+[^r19b-vhop]: V-HOP：https://arxiv.org/html/2502.17434v2 ；RSS：https://roboticsproceedings.org/rss21/p037.html ；代码：https://github.com/brown-ivl/v-hop 。
+[^r19b-teg]: TEG-Track, Enhancing Generalizable 6D Pose Tracking of an In-Hand Object with Tactile Sensing：https://arxiv.org/html/2210.04026v2 ；正式条目 RA-L 9(2):1106–1113 (2024)，DOI 10.1109/LRA.2023.3337690；代码：https://github.com/leolyliu/TEG-Track ，已发布 ShapeAlign 和 kinematics-only 实现，不能默认已有 FoundationPose 适配。
+[^r19b-vitazero]: ViTa-Zero：https://arxiv.org/html/2504.13179v1 ；项目：https://ivl.cs.brown.edu/research/vita-zero.html 。
+[^r19b-kinefuse]: KineFuse：https://arxiv.org/html/2607.14842v1 ；作者项目：https://cold-young.github.io/kine-fuse/ 。
+[^r19b-hive]: HIVE-6D 出版社摘要：https://ieeexplore.ieee.org/abstract/document/11543317 ，DOI 10.1109/LRA.2026.3699258。仅核查摘要，未获取全文。
+[^r19b-vitascope]: ViTaSCOPE：https://arxiv.org/html/2506.12239v1 ，§VI 明确说明未处理夹持内滑移；RSS：https://roboticsproceedings.org/rss21/p054.html 。
+[^r19b-active]: Active 6D Pose，IJRR 2026-01-27：https://journals.sagepub.com/doi/10.1177/02783649251411922 ；arXiv:2503.03726。
+[^r19b-multiview]: Naik 等，Multi-view object pose distribution tracking for pre-grasp planning on mobile robots：https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1683931/full ，正式发表 2026-01-14；§3 中明确动作在数字孪生执行。
+[^r19b-mitigation]: Schneider 等，Robust Pose Estimation through Failure Explanation and Mitigation，ICRA 2026 workshop extended abstract：https://icra2026-rigorous-perception.github.io/pdf/schneider2026.pdf 。
+[^r19b-rr-code]: RRTrack 官方仓库：https://github.com/7kevin24/RRTrack ，2026-11-19 README blob SHA d30598df015c2d195eaf8b7a76eb9141d4356d28。
+[^r19b-ua-code]: UA-Pose 官方仓库：https://github.com/minfenli/UA-Pose ，2026-11-19 仍只有 README 和 teaser 资料。
+[^r19b-fpplus]: FoundationPose++ 社区仓库：https://github.com/teal024/FoundationPose-plus-plus ，README Citation 节明确暂无论文。
