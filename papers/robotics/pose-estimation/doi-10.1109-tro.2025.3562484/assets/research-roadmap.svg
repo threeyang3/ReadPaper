@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="420" viewBox="0 0 1140 420" role="img" aria-label="SDFR research progression from baseline to Isaac Sim to uncertainty-aware refinement">
+<rect width="1140" height="420" rx="16" fill="#f9fbff"/>
+<text x="33" y="46" font-family="Arial" font-size="27" font-weight="700" fill="#142f4c">SDFR research roadmap</text>
+<text x="33" y="73" font-family="Arial" font-size="15" fill="#59738a">Controlled baseline first; targeted scientific hypothesis second; simulator as measurement generator</text>
+<g>
+<rect x="27" y="118" width="246" height="168" rx="13" fill="#eaf2ff" stroke="#95b6e1" stroke-width="2"/>
+<text x="48" y="150" font-family="Arial" font-size="19" font-weight="700" fill="#1d5291">00 Baseline</text>
+<text x="48" y="185" font-family="Arial" font-size="15" fill="#3a5474">Original PyTorch3D</text>
+<text x="48" y="208" font-family="Arial" font-size="15" fill="#3a5474">SDFR / ICP / FRICP</text>
+<text x="48" y="231" font-family="Arial" font-size="15" fill="#3a5474">Errors, seeds, runtime</text>
+</g>
+<path d="M275 202H308" stroke="#6e97c3" stroke-width="3"/><path d="M311 202l-13-7v14z" fill="#6e97c3"/>
+<rect x="314" y="118" width="244" height="168" rx="13" fill="#fff0df" stroke="#e7c18f" stroke-width="2"/>
+<text x="335" y="150" font-family="Arial" font-size="19" font-weight="700" fill="#a36e2e">01 Data challenges</text>
+<text x="335" y="185" font-family="Arial" font-size="15" fill="#765838">Occlusion / depth noise</text>
+<text x="335" y="208" font-family="Arial" font-size="15" fill="#765838">Wrong mask / outliers</text>
+<text x="335" y="231" font-family="Arial" font-size="15" fill="#765838">Cross-object geometry</text>
+<path d="M560 202H593" stroke="#6e97c3" stroke-width="3"/><path d="M596 202l-13-7v14z" fill="#6e97c3"/>
+<rect x="600" y="118" width="244" height="168" rx="13" fill="#e8f7f1" stroke="#96d2bd" stroke-width="2"/>
+<text x="621" y="150" font-family="Arial" font-size="19" font-weight="700" fill="#197b60">02 Method improvement</text>
+<text x="621" y="185" font-family="Arial" font-size="15" fill="#366a59">Robust SDF residual</text>
+<text x="621" y="208" font-family="Arial" font-size="15" fill="#366a59">Observation uncertainty</text>
+<text x="621" y="231" font-family="Arial" font-size="15" fill="#366a59">Visibility-aware weighting</text>
+<path d="M846 202H879" stroke="#6e97c3" stroke-width="3"/><path d="M882 202l-13-7v14z" fill="#6e97c3"/>
+<rect x="886" y="118" width="228" height="168" rx="13" fill="#f1ebfc" stroke="#c4b4e5" stroke-width="2"/>
+<text x="905" y="150" font-family="Arial" font-size="19" font-weight="700" fill="#6842aa">03 Isaac validation</text>
+<text x="905" y="185" font-family="Arial" font-size="15" fill="#66547f">RGB-D + instance mask</text>
+<text x="905" y="208" font-family="Arial" font-size="15" fill="#66547f">Panda + occluder</text>
+<text x="905" y="231" font-family="Arial" font-size="15" fill="#66547f">Synthetic to real</text>
+<rect x="175" y="324" width="795" height="57" rx="10" fill="#ffffff" stroke="#d6e1eb"/>
+<text x="572" y="347" font-family="Arial" font-size="17" font-weight="700" fill="#253b53" text-anchor="middle">Evaluation: pose success / error tails / robustness / runtime / calibration</text>
+<text x="572" y="367" font-family="Arial" font-size="13" fill="#657a8e" text-anchor="middle">Fixed seeds, matched inputs, same optimization budget · proposed design, not paper results</text>
+</svg>
