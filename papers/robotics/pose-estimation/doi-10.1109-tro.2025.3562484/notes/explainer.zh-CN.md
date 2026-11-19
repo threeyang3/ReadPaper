@@ -163,3 +163,7 @@ p = ((u-c_x)z/f_x,\ (v-c_y)z/f_y,\ z).
 采用 **原始 PyTorch3D 基线 → 消融实验 → Isaac Sim RGB-D + Panda 测试 → 真实深度验证** 的阶段化设计。GPU/环境限制、数据契约、实验变量、对照方法和相关研究已整理为 [研究路线图与细化实验协议](research-roadmap.zh-CN.md)。**这些是讨论形成的建议，尚未实施仿真或训练。**
 
 ![原创研究路线图](../assets/research-roadmap.svg)
+
+## 14. 2026-11-19 增量：研究方案可执行化
+
+将探索方向收敛为 H1（神经 SDF 数值/梯度误差是否影响下游 pose 收敛）和 H2（部分可见下可辨识性/任务风险），基于精确 CAD 几何、原始 OctreeSDF、Eikonal/法向正则、固定求解器、Isaac Sim RGB-D 数据接口形成配对对照。详见 [完整实验方案](experimental-protocol-v1.zh-CN.md) 和 [参数配置蓝图](experiment-config.v1.yaml)。这些是**尚未运行的研究计划**。
