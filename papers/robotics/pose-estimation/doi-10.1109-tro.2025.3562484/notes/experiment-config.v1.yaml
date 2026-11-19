@@ -1,0 +1,132 @@
+# SDFR Research — experiment protocol example, v1.0
+# Study design only: NOT a verified runnable application configuration.
+# All values below, unless flagged 'original', are proposal values and can be adapted.
+project: sdfr-research
+protocol_version: "2026-11-19-v1"
+status: planned_not_executed
+upstream:
+  repository: https://github.com/pangbo1997/SDFR
+  files_verified:
+    sdfr.py: c4952e067a8c22e8e64015f788309f51d4a1ce0b
+    run_sdfr.py: 3681ebfe2207245d80b29d047ae021130d80eff3
+    prepare_dataset.py: 56b87600f44dfb9a1b895334fdf93c7ed7158f22
+  pin_full_commit_before_running: true
+
+units:
+  geometry: meters
+  depth: z_along_optical_axis_m
+  camera_frame: opencv_right_down_forward
+  pose_convention: T_AB_maps_points_in_B_to_A_column_vectors
+  pose_gt_camera_from_world: inv(T_WC) @ T_WO_gt
+
+assets:
+  selection: [asymmetric_rigid, near_axis_symmetric, hole_or_thin_wall]
+  recommended_source: BOP_models_eval
+  check_watertight_for_signed_mesh_sdf: true
+  record_mesh_sha256: true
+
+phase_p0:
+  mode: author_original_standard
+  instances_per_object_per_rotation_bin: 25   # proposal pilot, NOT author 150
+  object_count: 3
+  rotation_bins_deg: [[5, 30], [30, 50], [50, 70], [70, 90]]
+  gt_depth_m: 0.5
+  camera_resolution_hw: [480, 640]
+  random_scenes:
+    seed_first: 1000
+    seed_count_per_bin: 25
+  initial_translation_bins_m_original_z: [[0.01, 0.05], [0.05, 0.1], [0.1, 0.2], [0.2, 0.3]]
+  original_xy_range_m: [0.0, 0.02]
+  algorithms: [sdfr_adam100, point_to_point_icp, point_to_plane_icp, fricp_if_available]
+  metrics: [rot_deg, trans_m, add_s, median, p95, runtime_ms]
+  paired_trial_ids: true
+
+phase_p1_representation:
+  sdf_representations:
+    - exact_mesh_query_geometry_reference
+    - octreesdf_original_value_L2
+    - octreesdf_value_L2_plus_eikonal
+    - octreesdf_value_L2_plus_normal_cosine
+  n_training_seeds: 3
+  training_seed_values: [101, 202, 303]
+  spatial_query_bands_m: [[0.0, 0.001], [0.001, 0.005], [0.005, 0.02]]
+  samples_per_band_per_object: 10000
+  sdf_diagnostics:
+    - signed_distance_mae
+    - inside_outside_sign_accuracy
+    - surface_chamfer
+    - gradient_angular_error_deg
+    - gradient_norm_error
+    - pose_step_alignment
+    - local_jacobian_singular_values
+  fixed_solver: sdfr_adam100
+  solvers_second_pass: [sdfr_adam100, damped_lm_trust_region]
+  sample_points_online: 150
+  online_max_steps: 100
+  clean_poses_from_phase_p0: true
+  gate: pose_improvement_must_repeat_across_objects_and_training_seeds
+
+phase_p2_observability:
+  object_count: 6
+  visibility_bands: [">80%", "50-80%", "20-50%", "<20%_stress_only"]
+  initial_rotation_bands_deg: [[0, 5], [5, 15], [15, 30], [30, 60]]
+  independent_scenes_per_cell: 30
+  candidate_poses_per_scene: 8  # proposal baseline, must time cost
+  corruption:
+    random_dropout_fraction: [0.0, 0.1, 0.3]
+    outlier_fraction: [0.0, 0.1, 0.3]
+    example_depth_sigma_at_0_5m_mm: [0.0, 1.0, 3.0]
+    # Examples above are NOT a RealSense D435 calibration model.
+  ablations:
+    - single_mode_sdfr
+    - multiple_initializations
+    - jacobian_spectrum_with_unit_normalization
+    - multiple_modes_plus_depth_render_validation
+    - abstain_if_unidentifiable
+  metrics: [vsd, mssd, mspd, task_center_mm, task_axis_deg, false_accept_rate, abstain_rate]
+  no_test_gt_in_inference: true
+
+isaac:
+  required: false
+  recommended_version: "6.2"
+  simulator_scope: separate_rgbd_data_generation
+  scene_stages: [static_clear, view_dependent, object_occlusion, robot_self_occlusion, dynamic_optional]
+  channels:
+    - rgb
+    - distance_to_image_plane
+    - instance_segmentation
+    - normals
+    - camera_intrinsics
+    - T_WC
+    - T_WO_gt
+  separate_python_environment_from_sdf_repo: true
+  exporter:
+    depth_filename: depth_z.npy
+    instance_mask_gt_filename: mask_gt.png
+    predicted_mask_filename: mask_pred.png
+    metadata_filename: manifest.json
+
+study_control:
+  common_scene_ids_across_methods: true
+  common_observation_points_across_methods: true
+  separate_validation_from_final_test: true
+  oracle_cad_or_gt_used_only_for_diagnostics_and_oracle_ablation: true
+  confidence_intervals: [wilson_binomial, hierarchical_bootstrap_scene_object]
+  trace:
+    - git_sha
+    - mesh_sha256
+    - model_weight_sha256
+    - seed
+    - python_torch_cuda
+    - gpu_driver
+    - simulator_version
+    - units_and_frames
+    - full_config_snapshot
+
+go_no_go:
+  G0: original_reproduction_and_coordinates_verified
+  G1: separate_sdf_value_and_gradient_errors_measured
+  G2: representation_change_causally_affects_pose_and_repeats_across_seeds
+  G3: observable_vs_unobservable_situations_identified
+  G4: isaac_data_contract_passed
+  G5: independent_final_evaluation_or_sim_to_real_if_required
