@@ -50,3 +50,21 @@
 - https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/requirements.html
 - https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/install_python.html
 - https://github.com/NVlabs/FoundationPose/pull/369
+
+
+## 2026-11-19 · 研究现状、社区评价与改进方向
+
+**用户问题**：FoundationPose 已发布较久且拥有大量 Star，为什么 6D 位姿估计仍受关注；过去方法和该项目的缺陷是什么；社区评价如何；可改进哪些方向？
+
+**完整新增调研**：[中文精读第十节](explainer.zh-CN.md#review-2026-11-19)。
+
+**主要结论**：
+- 6D 领域包含不同输入先验、目标发现、几何准备、时间恢复和控制可靠性要求。
+- 原版 track_one 使用上一帧单假设细化，缺少完整失效检测/自动恢复；Issue #233 的原作者解释 scorer 是相对排序量。
+- 2026-09-22 已发布的新官方 inference library 提供 GPU/C++/TensorRT、多对象与 Blackwell 支持；其 C API 跟踪 score 固定为 1，不能当作校准概率。
+- 结合 SAM-6D、FoundPose、Any6D、UA-Pose、Point2Pose 与 BOP2024/2025，分析目标发现、对象准备、不完整模型、遮挡恢复和工业多视角。
+- 社区记录覆盖 #25、#119、#136、#172、#233、#256、PR #369，区分个案、作者解释和新版缓解。
+- 推荐冻结视觉后端，研究机器人自遮挡/腕相机运动下的可靠性与恢复；双相机与接触作为可消融扩展。
+- 记录静止桌面和稳定抓持两种运动学公式，以及同预算/同传感器对照和真实任务指标。
+
+**执行状态**：文献与代码调研，未在用户 5090 或机器人运行；保留旧内容，增补日期化章节与日志，不触发模型训练或 CI。
