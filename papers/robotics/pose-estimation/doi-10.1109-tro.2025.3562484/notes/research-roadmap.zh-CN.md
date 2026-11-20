@@ -2,6 +2,10 @@
 
 > **文档性质**：研究选题建议与尚未实施的实验计划；不是原始 SDFR 论文已经完成的实验或结论。依据作者公开代码及 2026-11 核对的 Isaac Sim 官方文档，并参考 RNNPose、UA-Pose、SDFit 等相关工作。**当前尚未搭建仿真、训练模型或实际测量性能。**
 
+## 2026-11-20 H3 文献排重与创新边界
+
+**课题三已检索到直接强先例**：Naik 的 2022/2026 固定/机器人相机多模态位姿分布融合+抓取风险门控，ActivePose 的主动消歧与相机连续轨迹，Quality-Aware Active Re-Observation 的深度质量门控和运动成本，Breyer 2022 的观察/执行停止策略，Visibility-Aware Mobile Grasping 的自遮挡/可见性与运动联合规划。**不再将这些大方向本身视为创新**。详见 [H3 专项调研与收紧后的研究命题](h3-related-work-2026-11-20.zh-CN.md)。
+
 ## 2026-11-19 执行版详尽协议
 
 参见 [实验协议 v1（H1/H2/Isaac/Gates）](experimental-protocol-v1.zh-CN.md) 与 [YAML 参数蓝图](experiment-config.v1.yaml)。此前方向 A 的原始排序仅作为历史建议，已由先行工作审查修订。
